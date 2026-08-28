@@ -258,10 +258,6 @@ figure,figcaption{margin:0}
     rgba(29,25,23,.97) 0%, rgba(29,25,23,.95) 30%, rgba(29,25,23,.78) 45%,
     rgba(29,25,23,.38) 58%, rgba(29,25,23,.14) 72%, rgba(29,25,23,.30) 100%);
 }
-.hero::after{ /* film-grain-ish texture over the footage */
-  content:""; position:absolute; inset:0; z-index:1; pointer-events:none;
-  background:repeating-linear-gradient(112deg, rgba(255,255,255,.05) 0 1px, rgba(255,255,255,0) 1px 9px);
-}
 .hero .wrap{position:relative; z-index:2}
 .hero-inner{max-width:720px}
 .hero .eyebrow{color:var(--blush)}
@@ -652,11 +648,7 @@ figure,figcaption{margin:0}
       <div class="hero-inner">
         <p class="eyebrow">Ann Arbor &middot; Est. 2011</p>
         <h1>Where every visit <em>blooms</em> into confidence.</h1>
-        <p>
-          A calm, modern studio for hair, skin and bridal beauty. Our stylists blend
-          precision technique with unhurried care — so you leave looking like the best
-          version of yourself, not someone else's idea of you.
-        </p>
+        <p>Hair, skin and bridal beauty in a calm, modern studio. Never rushed.</p>
         <div class="hero-actions">
           <a href="#contact" class="btn btn--blush">Book an Appointment</a>
           <a href="#services" class="btn btn--ghost" style="color:#fff;border-color:rgba(255,255,255,.45)">Explore Services</a>

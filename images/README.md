@@ -24,12 +24,17 @@ picks them up — no code changes needed.
 
 All gallery photos want a portrait or square crop, ~900–1200px wide.
 
+All nine files above are now in place. Four gallery tiles remain
+placeholders — see the last section.
+
 ## Export settings
 
 JPEG, quality 75–80, each file under ~300 KB keeps the page fast.
 
 Every slot is `object-fit: cover`, so the photo is centre-cropped to the
-tile — keep the subject near the middle. Crop out phone status bars and
+tile — keep the subject near the middle. Where a subject sits high in the
+frame, the `<img>` carries an inline `object-position` to pull the crop up;
+adjust that percentage if a replacement photo frames differently. Crop out phone status bars and
 screen-recording chrome before saving; the tile will not hide them.
 
 Any file that is missing falls back to the blush gradient placeholder, so

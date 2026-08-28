@@ -1,23 +1,30 @@
-# Photos
+# Bloom & Blush Salon — website
 
-`index.html` looks for these five files. Filenames must match exactly —
-drop the images in and the page picks them up, no code changes needed.
+A single-page salon website: `index.html` holds the markup, styles and
+scripts in one file, with no external requests, so it runs by opening it in
+a browser and deploys by copying it to any host.
 
-| File | Used in | Best shape |
-|------|---------|-----------|
-| `salon-interior.jpg` | About / Our Story — main image | portrait or square, ~1200px wide |
-| `styling-curls.jpg`  | About / Our Story — small offset image | portrait, ~800px wide |
-| `bridal-glam.jpg`    | Gallery — large tall tile | portrait, ~1000px wide |
-| `blow-dry.jpg`       | Gallery — standard tile | portrait or square, ~900px wide |
-| `scalp-ritual.jpg`   | Gallery — standard tile | portrait or square, ~900px wide |
+## Files
 
-Every slot is `object-fit: cover`, so a photo is centre-cropped to the tile —
-keep the subject near the middle. Export as JPEG around quality 75–80; each
-file under ~300 KB keeps the page fast.
+| Path | What it is |
+|------|-----------|
+| `index.html` | The entire site — HTML, CSS and JS |
+| `images/` | Photos the page loads (see `images/README.md`) |
 
-Any tile whose file is missing falls back to the blush gradient placeholder,
-so the page never shows a broken image.
+## Sections
 
-The remaining gallery tiles are still placeholders. To fill one, copy the
-pattern from a tile that already has a photo: add an `<img>` as the first
-child and add `has-photo` to the `<figure>` class list.
+Sticky header · hero · services · about with stat counters · filterable
+gallery · pricing · testimonial carousel · location and contact · footer.
+
+## Adding photos
+
+The page has nine photo slots. Each one loads a file from `images/`; any
+file that is missing falls back to a blush gradient placeholder, so the
+page never shows a broken image. `images/README.md` lists the exact
+filenames and the tile each one fills.
+
+## Rebranding
+
+Client-specific spots are marked with `[SWAP]` comments in `index.html`:
+colours and fonts (the `:root` variables), logo, photos, copy, and contact
+details.

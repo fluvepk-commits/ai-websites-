@@ -1,0 +1,1500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bloom &amp; Blush Salon — Hair, Skin, Makeup &amp; Bridal in Ann Arbor</title>
+<meta name="description" content="Bloom &amp; Blush Salon in Ann Arbor, MI — expert hair colour, skincare, makeup, bridal styling, nails and waxing in a warm, modern studio.">
+
+<!--
+  ============================================================================
+  BLOOM & BLUSH SALON — single-file template
+  ----------------------------------------------------------------------------
+  Everything (CSS + JS) lives in this one file, no external requests, so it
+  works offline and can be dropped on any host as-is.
+
+  HOW TO REBRAND FOR A REAL CLIENT — each block below is marked with a
+  [SWAP] comment where client-specific content lives:
+    1.  Colours / fonts ......... :root variables in the CSS
+    2.  Logo .................... .logo markup in header + footer
+    3.  Photos .................. every .ph element (see "PLACEHOLDER IMAGES")
+    4.  Copy .................... section by section, all plain HTML
+    5.  Contact details ......... #contact section + footer + tel:/wa.me links
+  Optional: to use web fonts, add before </head>:
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  ...then put those families first in --font-serif / --font-sans.
+  ============================================================================
+-->
+
+<style>
+/* ===========================================================================
+   1. DESIGN TOKENS  [SWAP: brand colours + fonts]
+   =========================================================================== */
+:root{
+  --cream:      #FBF7F3;   /* page background */
+  --cream-deep: #F3EAE3;   /* alternating section background */
+  --blush:      #E7C6C2;   /* primary brand blush */
+  --blush-soft: #F7E6E2;   /* tints, chips, hovers */
+  --rose:       #B87B74;   /* deeper rose for links / accents */
+  --charcoal:   #1D1917;   /* headings, dark sections */
+  --ink:        #332D2A;   /* body text */
+  --muted:      #7C716B;   /* secondary text */
+  --gold:       #B08D57;   /* thin luxury accent */
+  --line:       #E6DAD2;   /* hairline borders */
+  --white:      #FFFFFF;
+
+  --font-serif: "Cormorant Garamond", "Playfair Display", Georgia, "Times New Roman", serif;
+  --font-sans:  "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+  --radius:   14px;
+  --radius-l: 22px;
+  --shadow:   0 18px 40px -24px rgba(45,30,26,.45);
+  --shadow-l: 0 30px 70px -34px rgba(45,30,26,.55);
+  --wrap:     1180px;
+  --header-h: 76px;
+  --ease:     cubic-bezier(.22,.68,.36,1);
+}
+
+/* ===========================================================================
+   2. BASE
+   =========================================================================== */
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth; scroll-padding-top:var(--header-h)}
+body{
+  margin:0;
+  background:var(--cream);
+  color:var(--ink);
+  font-family:var(--font-sans);
+  font-size:16px;
+  line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+h1,h2,h3,h4{
+  font-family:var(--font-serif);
+  color:var(--charcoal);
+  font-weight:600;
+  line-height:1.15;
+  letter-spacing:.005em;
+  margin:0 0 .5em;
+}
+h1{font-size:clamp(2.6rem,6.2vw,4.6rem)}
+h2{font-size:clamp(2rem,4.2vw,3.1rem)}
+h3{font-size:clamp(1.15rem,2vw,1.4rem)}
+p{margin:0 0 1rem}
+a{color:var(--rose); text-decoration:none}
+a:hover{color:var(--charcoal)}
+img{max-width:100%; display:block}
+ul{margin:0; padding:0; list-style:none}
+figure,figcaption{margin:0}
+:focus-visible{outline:2px solid var(--rose); outline-offset:3px; border-radius:6px}
+
+.wrap{width:100%; max-width:var(--wrap); margin:0 auto; padding:0 24px}
+.section{padding:clamp(72px,9vw,120px) 0}
+.section--alt{background:var(--cream-deep)}
+.section--dark{background:var(--charcoal); color:#E9E1DC}
+.section--dark h2,.section--dark h3{color:#FBF7F3}
+
+/* Small caps eyebrow above every section title */
+.eyebrow{
+  font-family:var(--font-sans);
+  font-size:.72rem;
+  font-weight:600;
+  letter-spacing:.28em;
+  text-transform:uppercase;
+  color:var(--rose);
+  margin:0 0 .9rem;
+  display:flex; align-items:center; gap:12px;
+}
+.eyebrow::before{content:""; width:28px; height:1px; background:var(--gold)}
+.section-head{max-width:640px; margin-bottom:clamp(38px,5vw,60px)}
+.section-head.center{margin-left:auto; margin-right:auto; text-align:center}
+.section-head.center .eyebrow{justify-content:center}
+.section-head p{color:var(--muted); font-size:1.05rem; margin:0}
+.lead{font-size:1.08rem; color:var(--muted)}
+
+/* Buttons */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:9px;
+  padding:14px 30px;
+  border:1px solid transparent;
+  border-radius:100px;
+  font-size:.85rem; font-weight:600; letter-spacing:.09em; text-transform:uppercase;
+  cursor:pointer;
+  transition:transform .25s var(--ease), background .25s var(--ease), color .25s var(--ease), border-color .25s var(--ease), box-shadow .25s var(--ease);
+  white-space:nowrap;
+}
+.btn:hover{transform:translateY(-2px)}
+.btn--primary{background:var(--charcoal); color:#fff; box-shadow:var(--shadow)}
+.btn--primary:hover{background:var(--rose); color:#fff}
+.btn--blush{background:var(--blush); color:var(--charcoal)}
+.btn--blush:hover{background:var(--charcoal); color:#fff}
+.btn--ghost{background:transparent; color:var(--charcoal); border-color:rgba(29,25,23,.28)}
+.btn--ghost:hover{background:var(--charcoal); color:#fff; border-color:var(--charcoal)}
+.btn--light{background:#fff; color:var(--charcoal)}
+.btn--light:hover{background:var(--blush)}
+.btn--sm{padding:11px 22px; font-size:.75rem}
+
+/* ---------------------------------------------------------------------------
+   PLACEHOLDER IMAGES
+   Every visual is a CSS-painted stand-in (.ph) so the file stays self-contained.
+   [SWAP] To use a real photo, either:
+     a) add an <img src="photo.jpg" alt="..."> inside the .ph element, or
+     b) give the element: background-image:url('photo.jpg'); background-size:cover;
+   --------------------------------------------------------------------------- */
+.ph{
+  position:relative; overflow:hidden;
+  background-color:var(--blush-soft);
+  background-image:
+    radial-gradient(120% 90% at 22% 12%, rgba(255,255,255,.85), rgba(255,255,255,0) 58%),
+    linear-gradient(140deg, var(--blush-soft) 0%, var(--blush) 52%, #D8B4AE 100%);
+  background-size:cover; background-position:center;
+}
+.ph::after{ /* soft diagonal sheen so blocks don't read as flat colour */
+  content:""; position:absolute; inset:0;
+  background:repeating-linear-gradient(115deg, rgba(255,255,255,.16) 0 2px, rgba(255,255,255,0) 2px 16px);
+  opacity:.55; pointer-events:none;
+}
+.ph--2{background-image:radial-gradient(120% 90% at 78% 18%, rgba(255,255,255,.8), rgba(255,255,255,0) 60%), linear-gradient(160deg,#EFE2D8,#D9C3B4 60%,#C0A392)}
+.ph--3{background-image:radial-gradient(120% 90% at 30% 80%, rgba(255,255,255,.75), rgba(255,255,255,0) 60%), linear-gradient(200deg,#F3E7E4,#C9A4A0 55%,#8E6B69)}
+.ph--4{background-image:radial-gradient(110% 90% at 70% 25%, rgba(255,255,255,.8), rgba(255,255,255,0) 58%), linear-gradient(135deg,#EDE7E0,#CFC3B6 55%,#A79483)}
+.ph--5{background-image:radial-gradient(120% 100% at 20% 20%, rgba(255,255,255,.85), rgba(255,255,255,0) 55%), linear-gradient(150deg,#F6EAE6,#E2C0BA 60%,#B98D87)}
+.ph--6{background-image:radial-gradient(110% 90% at 60% 75%, rgba(255,255,255,.7), rgba(255,255,255,0) 60%), linear-gradient(190deg,#E9DED6,#C4AFA4 55%,#94796D)}
+/* tiny centred glyph so an empty placeholder still looks intentional */
+.ph-mark{
+  position:absolute; inset:0; display:grid; place-items:center;
+  font-family:var(--font-serif); font-size:2.1rem; color:rgba(29,25,23,.24);
+  letter-spacing:.14em; z-index:1;
+}
+
+/* ===========================================================================
+   3. HEADER  [SWAP: logo text, nav labels, Book Now link]
+   =========================================================================== */
+.header{
+  position:sticky; top:0; z-index:100;
+  background:rgba(251,247,243,.86);
+  backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid transparent;
+  transition:box-shadow .3s var(--ease), border-color .3s var(--ease), background .3s var(--ease);
+}
+.header.is-stuck{border-bottom-color:var(--line); box-shadow:0 10px 30px -26px rgba(45,30,26,.7)}
+.header .wrap{display:flex; align-items:center; justify-content:space-between; gap:20px; height:var(--header-h)}
+
+.logo{display:inline-flex; align-items:center; gap:11px; color:var(--charcoal)}
+.logo:hover{color:var(--charcoal)}
+.logo-mark{
+  width:38px; height:38px; flex:none; border-radius:50%;
+  background:linear-gradient(140deg,var(--blush),#D6A9A3);
+  display:grid; place-items:center; color:#fff;
+  box-shadow:0 6px 16px -8px rgba(184,123,116,.9);
+}
+.logo-mark svg{width:20px; height:20px}
+.logo-text{display:flex; flex-direction:column; line-height:1}
+.logo-name{font-family:var(--font-serif); font-size:1.32rem; font-weight:600; letter-spacing:.01em}
+.logo-name .amp{color:var(--rose); font-style:italic; padding:0 1px}
+.logo-sub{font-size:.56rem; letter-spacing:.34em; text-transform:uppercase; color:var(--muted); margin-top:4px}
+
+.nav{display:flex; align-items:center; gap:30px}
+.nav a{
+  position:relative; color:var(--ink); font-size:.86rem; font-weight:500;
+  letter-spacing:.06em; text-transform:uppercase; padding:6px 0;
+}
+.nav a::after{
+  content:""; position:absolute; left:0; bottom:0; height:1px; width:0;
+  background:var(--rose); transition:width .28s var(--ease);
+}
+.nav a:hover::after,.nav a.is-active::after{width:100%}
+.nav a.is-active{color:var(--rose)}
+.header-cta{display:flex; align-items:center; gap:14px}
+.nav .btn{display:none} /* nav Book Now is mobile-drawer only; header keeps the desktop one */
+
+.nav-toggle{
+  display:none; width:42px; height:42px; border:1px solid var(--line); border-radius:50%;
+  background:#fff; cursor:pointer; padding:0; place-items:center;
+}
+.nav-toggle span{display:block; width:17px; height:1.5px; background:var(--charcoal); position:relative; transition:.25s var(--ease)}
+.nav-toggle span::before,.nav-toggle span::after{content:""; position:absolute; left:0; width:17px; height:1.5px; background:var(--charcoal); transition:.25s var(--ease)}
+.nav-toggle span::before{top:-5.5px} .nav-toggle span::after{top:5.5px}
+.nav-toggle[aria-expanded="true"] span{background:transparent}
+.nav-toggle[aria-expanded="true"] span::before{top:0; transform:rotate(45deg)}
+.nav-toggle[aria-expanded="true"] span::after{top:0; transform:rotate(-45deg)}
+
+/* ===========================================================================
+   4. HERO  [SWAP: background photo, tagline, intro]
+   =========================================================================== */
+.hero{
+  position:relative; min-height:calc(100svh - var(--header-h)); display:flex; align-items:center;
+  padding:clamp(70px,10vw,120px) 0;
+  /* [SWAP] real photo: background-image:linear-gradient(...), url('hero.jpg'); */
+  background-image:
+    linear-gradient(100deg, rgba(29,25,23,.72) 0%, rgba(29,25,23,.46) 46%, rgba(184,123,116,.30) 100%),
+    radial-gradient(70% 80% at 78% 26%, rgba(231,198,194,.55), rgba(231,198,194,0) 62%),
+    linear-gradient(155deg,#4A3B37 0%,#7A5C55 42%,#C79A93 78%,#E7C6C2 100%);
+  background-size:cover; background-position:center;
+  color:#fff; overflow:hidden;
+}
+.hero::after{ /* film-grain-ish texture over the "photo" */
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background:repeating-linear-gradient(112deg, rgba(255,255,255,.05) 0 1px, rgba(255,255,255,0) 1px 9px);
+}
+.hero .wrap{position:relative; z-index:2}
+.hero-inner{max-width:720px}
+.hero .eyebrow{color:var(--blush)}
+.hero .eyebrow::before{background:var(--blush)}
+.hero h1{color:#fff; margin-bottom:.35em}
+.hero h1 em{font-style:italic; color:var(--blush)}
+.hero p{font-size:1.1rem; color:rgba(255,255,255,.86); max-width:52ch}
+.hero-actions{display:flex; flex-wrap:wrap; gap:14px; margin-top:34px}
+.hero-meta{
+  display:flex; flex-wrap:wrap; gap:14px 34px; margin-top:52px; padding-top:26px;
+  border-top:1px solid rgba(255,255,255,.22); font-size:.84rem; color:rgba(255,255,255,.8);
+}
+.hero-meta span{display:flex; align-items:center; gap:9px}
+.hero-meta svg{width:16px; height:16px; flex:none; color:var(--blush)}
+
+/* ===========================================================================
+   5. SERVICES  [SWAP: card titles + descriptions]
+   =========================================================================== */
+.grid{display:grid; gap:26px}
+.services-grid{grid-template-columns:repeat(auto-fit,minmax(266px,1fr))}
+.card{
+  background:#fff; border:1px solid var(--line); border-radius:var(--radius-l);
+  padding:34px 30px 32px; position:relative; overflow:hidden;
+  transition:transform .35s var(--ease), box-shadow .35s var(--ease), border-color .35s var(--ease);
+}
+.card::before{
+  content:""; position:absolute; left:0; top:0; height:3px; width:0;
+  background:linear-gradient(90deg,var(--blush),var(--rose)); transition:width .45s var(--ease);
+}
+.card:hover{transform:translateY(-6px); box-shadow:var(--shadow-l); border-color:transparent}
+.card:hover::before{width:100%}
+.card-icon{
+  width:56px; height:56px; border-radius:16px; display:grid; place-items:center;
+  background:var(--blush-soft); color:var(--rose); margin-bottom:20px;
+  transition:background .35s var(--ease), color .35s var(--ease);
+}
+.card:hover .card-icon{background:var(--charcoal); color:var(--blush)}
+.card-icon svg{width:26px; height:26px}
+.card h3{margin-bottom:.45em}
+.card p{color:var(--muted); font-size:.95rem; margin:0}
+.card-link{
+  display:inline-flex; align-items:center; gap:7px; margin-top:18px;
+  font-size:.76rem; font-weight:600; letter-spacing:.13em; text-transform:uppercase; color:var(--charcoal);
+}
+.card-link svg{width:14px; height:14px; transition:transform .3s var(--ease)}
+.card-link:hover svg{transform:translateX(4px)}
+
+/* ===========================================================================
+   6. ABOUT + STAT COUNTERS  [SWAP: story copy, stat numbers]
+   =========================================================================== */
+.about{display:grid; grid-template-columns:1fr 1fr; gap:clamp(36px,6vw,80px); align-items:center}
+.about-media{position:relative}
+.about-media .ph{height:min(560px,62vw); border-radius:var(--radius-l); box-shadow:var(--shadow-l)}
+.about-media .ph:nth-child(2){
+  position:absolute; right:-6%; bottom:-9%; width:46%; height:44%;
+  border:8px solid var(--cream); border-radius:var(--radius-l);
+}
+.about-badge{
+  position:absolute; left:-18px; top:26px; z-index:3;
+  background:var(--charcoal); color:#fff; padding:16px 20px; border-radius:var(--radius);
+  font-family:var(--font-serif); font-size:1rem; line-height:1.25; box-shadow:var(--shadow);
+}
+.about-badge b{display:block; font-size:1.7rem; color:var(--blush)}
+.stats{display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-top:38px; padding-top:34px; border-top:1px solid var(--line)}
+.stat-num{
+  font-family:var(--font-serif); font-size:clamp(2.1rem,4vw,2.9rem); font-weight:600;
+  color:var(--charcoal); line-height:1; display:flex; align-items:baseline; gap:2px;
+}
+.stat-num .suffix{color:var(--rose); font-size:.6em}
+.stat-label{font-size:.75rem; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); margin-top:10px}
+.sig{font-family:var(--font-serif); font-style:italic; font-size:1.5rem; color:var(--rose); margin-top:28px}
+.sig small{display:block; font-family:var(--font-sans); font-style:normal; font-size:.72rem; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); margin-top:6px}
+
+/* ===========================================================================
+   7. GALLERY  [SWAP: photos + captions; filter chips map to data-cat]
+   =========================================================================== */
+.filters{display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-bottom:34px}
+.filter{
+  padding:9px 20px; border-radius:100px; border:1px solid var(--line); background:#fff;
+  font-size:.78rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--muted); cursor:pointer; transition:.25s var(--ease);
+}
+.filter:hover{border-color:var(--rose); color:var(--rose)}
+.filter.is-active{background:var(--charcoal); border-color:var(--charcoal); color:#fff}
+.gallery{display:grid; grid-template-columns:repeat(4,1fr); gap:16px}
+.tile{
+  position:relative; border-radius:var(--radius); overflow:hidden; cursor:pointer;
+  min-height:220px; transition:opacity .35s var(--ease), transform .35s var(--ease);
+}
+.tile.tall{grid-row:span 2; min-height:456px}
+.tile.wide{grid-column:span 2}
+.tile.is-hidden{display:none}
+.tile-overlay{
+  position:absolute; inset:0; z-index:2; display:flex; flex-direction:column; justify-content:flex-end;
+  padding:20px; color:#fff;
+  background:linear-gradient(to top, rgba(29,25,23,.78) 0%, rgba(29,25,23,.12) 55%, rgba(29,25,23,0) 100%);
+  opacity:0; transition:opacity .35s var(--ease);
+}
+.tile:hover .tile-overlay,.tile:focus-within .tile-overlay{opacity:1}
+.tile:hover{transform:scale(1.012)}
+.tile-cat{
+  align-self:flex-start; font-size:.62rem; font-weight:600; letter-spacing:.18em; text-transform:uppercase;
+  background:rgba(255,255,255,.9); color:var(--charcoal); padding:5px 11px; border-radius:100px; margin-bottom:10px;
+}
+.tile-title{font-family:var(--font-serif); font-size:1.2rem}
+/* always-visible category chip so labels read even without hover (touch) */
+.tile-chip{
+  position:absolute; z-index:3; left:14px; top:14px;
+  font-size:.6rem; font-weight:600; letter-spacing:.16em; text-transform:uppercase;
+  background:rgba(251,247,243,.88); color:var(--charcoal); padding:5px 10px; border-radius:100px;
+}
+
+/* ===========================================================================
+   8. PRICING  [SWAP: service names, descriptions, prices]
+   =========================================================================== */
+.price-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:26px}
+.price-card{background:#fff; border:1px solid var(--line); border-radius:var(--radius-l); padding:34px 30px; position:relative}
+.price-card.is-featured{background:var(--charcoal); border-color:var(--charcoal); color:#E9E1DC}
+.price-card.is-featured h3,.price-card.is-featured .price-name{color:#fff}
+.price-card.is-featured .price-row{border-color:rgba(255,255,255,.12)}
+.price-card.is-featured .price-desc{color:rgba(233,225,220,.62)}
+.price-card.is-featured .price-val{color:var(--blush)}
+.price-tag{
+  position:absolute; top:-13px; right:26px; background:var(--blush); color:var(--charcoal);
+  font-size:.62rem; font-weight:700; letter-spacing:.16em; text-transform:uppercase; padding:6px 14px; border-radius:100px;
+}
+.price-head{display:flex; align-items:center; gap:13px; margin-bottom:22px}
+.price-head svg{width:22px; height:22px; color:var(--rose)}
+.price-card.is-featured .price-head svg{color:var(--blush)}
+.price-head h3{margin:0}
+.price-row{display:flex; align-items:baseline; gap:14px; padding:15px 0; border-bottom:1px dashed var(--line)}
+.price-row:last-child{border-bottom:0; padding-bottom:0}
+.price-info{flex:1; min-width:0}
+.price-name{display:block; font-weight:600; color:var(--charcoal); font-size:.98rem}
+.price-desc{display:block; font-size:.82rem; color:var(--muted); margin-top:2px}
+.price-val{font-family:var(--font-serif); font-size:1.35rem; font-weight:600; color:var(--charcoal); white-space:nowrap}
+.price-note{
+  margin-top:30px; text-align:center; font-size:.88rem; color:var(--muted);
+  display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:8px;
+}
+
+/* ===========================================================================
+   9. TESTIMONIALS (carousel)  [SWAP: quotes, names, ratings]
+   =========================================================================== */
+.carousel{position:relative; overflow:hidden; padding:4px}
+.track{display:flex; transition:transform .55s var(--ease); will-change:transform}
+.slide{flex:0 0 33.3333%; padding:0 13px; box-sizing:border-box}
+.quote{
+  background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.14);
+  border-radius:var(--radius-l); padding:34px 30px; height:100%;
+  display:flex; flex-direction:column; backdrop-filter:blur(2px);
+}
+.stars{display:flex; gap:4px; color:var(--gold); margin-bottom:18px}
+.stars svg{width:17px; height:17px}
+.quote-mark{font-family:var(--font-serif); font-size:3.4rem; line-height:.6; color:var(--blush); opacity:.5; margin-bottom:8px}
+.quote p{font-family:var(--font-serif); font-size:1.12rem; line-height:1.6; color:#F3EAE5; flex:1}
+.quote-by{display:flex; align-items:center; gap:14px; margin-top:24px; padding-top:20px; border-top:1px solid rgba(255,255,255,.14)}
+.avatar{
+  width:46px; height:46px; border-radius:50%; flex:none; display:grid; place-items:center;
+  background:linear-gradient(140deg,var(--blush),#B87B74); color:#fff;
+  font-family:var(--font-serif); font-size:1.05rem;
+}
+.quote-name{font-weight:600; color:#fff; font-size:.95rem}
+.quote-role{font-size:.78rem; color:rgba(233,225,220,.6)}
+.carousel-nav{display:flex; align-items:center; justify-content:center; gap:22px; margin-top:38px}
+.c-btn{
+  width:46px; height:46px; border-radius:50%; border:1px solid rgba(255,255,255,.24);
+  background:transparent; color:#E9E1DC; cursor:pointer; display:grid; place-items:center; transition:.25s var(--ease);
+}
+.c-btn:hover{background:var(--blush); border-color:var(--blush); color:var(--charcoal)}
+.c-btn svg{width:18px; height:18px}
+.dots{display:flex; gap:9px}
+.dot{width:8px; height:8px; border-radius:50%; border:0; padding:0; background:rgba(255,255,255,.26); cursor:pointer; transition:.25s var(--ease)}
+.dot.is-active{background:var(--blush); width:26px; border-radius:100px}
+
+/* ===========================================================================
+   10. CONTACT  [SWAP: address, phone, WhatsApp, hours, map embed]
+   =========================================================================== */
+.contact{display:grid; grid-template-columns:1fr 1.05fr; gap:clamp(34px,5vw,64px); align-items:start}
+.info-list{display:grid; gap:22px; margin-bottom:30px}
+.info{display:flex; gap:16px; align-items:flex-start}
+.info-icon{
+  width:46px; height:46px; flex:none; border-radius:14px; display:grid; place-items:center;
+  background:var(--blush-soft); color:var(--rose);
+}
+.info-icon svg{width:20px; height:20px}
+.info h4{font-family:var(--font-sans); font-size:.72rem; letter-spacing:.18em; text-transform:uppercase; color:var(--muted); margin:0 0 5px}
+.info p,.info a{margin:0; font-size:1rem; color:var(--ink)}
+.info a:hover{color:var(--rose)}
+.hours{background:#fff; border:1px solid var(--line); border-radius:var(--radius-l); padding:26px 28px}
+.hours h4{font-family:var(--font-serif); font-size:1.2rem; margin:0 0 14px}
+.hours li{display:flex; justify-content:space-between; gap:16px; padding:9px 0; border-bottom:1px dashed var(--line); font-size:.92rem}
+.hours li:last-child{border-bottom:0}
+.hours .day{color:var(--muted)}
+.hours .time{font-weight:600; color:var(--charcoal)}
+.hours .closed{color:var(--rose)}
+.contact-actions{display:flex; flex-wrap:wrap; gap:12px; margin-top:26px}
+
+/* Map placeholder — [SWAP] replace the whole .map block with a real
+   <iframe src="https://www.google.com/maps/embed?..." style="border:0" loading="lazy"></iframe> */
+.map{
+  position:relative; height:100%; min-height:430px; border-radius:var(--radius-l); overflow:hidden;
+  border:1px solid var(--line); box-shadow:var(--shadow);
+  background:
+    linear-gradient(rgba(231,198,194,.13),rgba(231,198,194,.13)),
+    repeating-linear-gradient(0deg,   #E9E2DA 0 1px, transparent 1px 46px),
+    repeating-linear-gradient(90deg,  #E9E2DA 0 1px, transparent 1px 46px),
+    linear-gradient(150deg,#F7F3EE,#EFE7DF);
+}
+.map::before{ /* two "roads" crossing the map */
+  content:""; position:absolute; inset:0;
+  background:
+    linear-gradient(90deg, transparent 0 12%, #F0E3DC 12% 17%, transparent 17% 100%),
+    linear-gradient(0deg,  transparent 0 44%, #F0E3DC 44% 49%, transparent 49% 100%);
+}
+.map-pin{
+  position:absolute; left:50%; top:46%; transform:translate(-50%,-100%); z-index:2;
+  display:flex; flex-direction:column; align-items:center; color:var(--rose);
+}
+.map-pin svg{width:42px; height:42px; filter:drop-shadow(0 8px 12px rgba(45,30,26,.3)); animation:bob 2.6s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.map-card{
+  position:absolute; left:20px; right:20px; bottom:20px; z-index:3;
+  background:rgba(255,255,255,.94); backdrop-filter:blur(6px);
+  border-radius:var(--radius); padding:18px 20px; box-shadow:var(--shadow);
+  display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;
+}
+.map-card strong{display:block; font-family:var(--font-serif); font-size:1.1rem; color:var(--charcoal)}
+.map-card span{font-size:.86rem; color:var(--muted)}
+
+/* ===========================================================================
+   11. FOOTER  [SWAP: links, socials, copyright]
+   =========================================================================== */
+.footer{background:var(--charcoal); color:rgba(233,225,220,.72); padding:70px 0 0}
+.footer .logo,.footer .logo-name{color:#fff}
+.footer .logo-sub{color:rgba(233,225,220,.55)}
+.footer-grid{display:grid; grid-template-columns:1.6fr 1fr 1fr 1.3fr; gap:40px; padding-bottom:52px}
+.footer h4{font-family:var(--font-sans); font-size:.72rem; letter-spacing:.2em; text-transform:uppercase; color:#fff; margin:0 0 18px}
+.footer li{margin-bottom:11px}
+.footer a{color:rgba(233,225,220,.72); font-size:.93rem}
+.footer a:hover{color:var(--blush)}
+.footer p{font-size:.93rem; max-width:34ch}
+.socials{display:flex; gap:11px; margin-top:20px}
+.social{
+  width:40px; height:40px; border-radius:50%; display:grid; place-items:center;
+  border:1px solid rgba(255,255,255,.18); color:#E9E1DC; transition:.25s var(--ease);
+}
+.social:hover{background:var(--blush); border-color:var(--blush); color:var(--charcoal); transform:translateY(-3px)}
+.social svg{width:17px; height:17px}
+.footer-bottom{
+  border-top:1px solid rgba(255,255,255,.12); padding:24px 0;
+  display:flex; justify-content:space-between; align-items:center; gap:14px; flex-wrap:wrap;
+  font-size:.84rem; color:rgba(233,225,220,.55);
+}
+.footer-bottom a{font-size:.84rem}
+
+/* ===========================================================================
+   12. SCROLL REVEAL + REDUCED MOTION
+   =========================================================================== */
+.reveal{opacity:0; transform:translateY(26px); transition:opacity .8s var(--ease), transform .8s var(--ease)}
+.reveal.is-in{opacity:1; transform:none}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.001ms !important; transition-duration:.001ms !important}
+  .reveal{opacity:1; transform:none}
+}
+
+/* ===========================================================================
+   13. RESPONSIVE
+   =========================================================================== */
+@media (max-width:1024px){
+  .gallery{grid-template-columns:repeat(3,1fr)}
+  .footer-grid{grid-template-columns:1fr 1fr; gap:34px}
+  .slide{flex-basis:50%}
+  .about{grid-template-columns:1fr}
+  .about-media{order:-1; margin-bottom:10px}
+  .about-media .ph{height:min(430px,62vw)}
+  /* keep the offset detail photo inside the stacked column (no page overflow) */
+  .about-media .ph:nth-child(2){right:0; bottom:-5%; width:40%; height:38%}
+  .contact{grid-template-columns:1fr}
+  .map{min-height:340px}
+}
+@media (max-width:860px){
+  .nav{
+    position:fixed; inset:var(--header-h) 0 auto 0;
+    flex-direction:column; align-items:stretch; gap:0;
+    background:var(--cream); border-bottom:1px solid var(--line);
+    padding:10px 24px 26px; box-shadow:var(--shadow);
+    transform:translateY(-14px); opacity:0; pointer-events:none;
+    transition:opacity .28s var(--ease), transform .28s var(--ease);
+    max-height:calc(100svh - var(--header-h)); overflow-y:auto;
+  }
+  .nav.is-open{opacity:1; transform:none; pointer-events:auto}
+  .nav a{padding:15px 0; border-bottom:1px solid var(--line); font-size:.95rem}
+  .nav a::after{display:none}
+  .nav-toggle{display:grid}
+  .header-cta .btn{display:none}
+  .nav .btn{display:inline-flex; margin-top:20px; justify-content:center}
+}
+@media (max-width:700px){
+  :root{--header-h:68px}
+  .gallery{grid-template-columns:repeat(2,1fr); gap:12px}
+  .tile{min-height:170px}
+  .tile.tall{grid-row:span 1; min-height:170px}
+  .tile.wide{grid-column:span 2}
+  .slide{flex-basis:100%}
+  .stats{grid-template-columns:1fr; gap:0}
+  .stats>div{padding:16px 0; border-bottom:1px dashed var(--line)}
+  .stats>div:last-child{border-bottom:0}
+  .stat-num{font-size:2.2rem}
+  .about-media .ph:nth-child(2){display:none}
+  .footer-grid{grid-template-columns:1fr}
+  .hero{min-height:auto}
+  .hero-meta{gap:12px 20px}
+  .card{padding:28px 24px}
+}
+@media (max-width:420px){
+  .wrap{padding:0 18px}
+  .btn{padding:13px 22px; font-size:.78rem}
+  .logo-name{font-size:1.15rem}
+}
+</style>
+</head>
+<body>
+
+<!-- ==========================================================================
+     1. STICKY HEADER
+     ========================================================================== -->
+<header class="header" id="header">
+  <div class="wrap">
+
+    <!-- [SWAP] Logo: text + icon only, no image file needed -->
+    <a href="#home" class="logo" aria-label="Bloom and Blush Salon — home">
+      <span class="logo-mark" aria-hidden="true">
+        <!-- simple bloom / petal glyph -->
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c1.7 0 3 1.3 3 3 0 .6-.2 1.2-.5 1.7C15.2 6.3 16 6 17 6c1.7 0 3 1.3 3 3s-1.3 3-3 3c-.6 0-1.2-.2-1.7-.5.3.5.7 1.2.7 2.5 0 1.7-1.3 3-3 3s-3-1.3-3-3c0-1.3.4-2 .7-2.5-.5.3-1.1.5-1.7.5-1.7 0-3-1.3-3-3s1.3-3 3-3c1 0 1.8.3 2.5.7C9.2 6.2 9 5.6 9 5c0-1.7 1.3-3 3-3zm0 8.2a1.8 1.8 0 100 3.6 1.8 1.8 0 000-3.6z"/><path d="M11.2 16.5h1.6L13.4 22h-2.8l.6-5.5z" opacity=".75"/></svg>
+      </span>
+      <span class="logo-text">
+        <span class="logo-name">Bloom <span class="amp">&amp;</span> Blush</span>
+        <span class="logo-sub">Salon &amp; Studio</span>
+      </span>
+    </a>
+
+    <!-- [SWAP] Navigation labels / anchors -->
+    <nav class="nav" id="nav" aria-label="Main navigation">
+      <a href="#home">Home</a>
+      <a href="#services">Services</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+      <a href="#contact" class="btn btn--primary btn--sm">Book Now</a>
+    </nav>
+
+    <div class="header-cta">
+      <!-- [SWAP] point at a real booking system, e.g. https://booking.example.com -->
+      <a href="#contact" class="btn btn--primary btn--sm">Book Now</a>
+      <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="nav" aria-label="Toggle menu">
+        <span></span>
+      </button>
+    </div>
+
+  </div>
+</header>
+
+<main>
+
+  <!-- ========================================================================
+       2. HERO  [SWAP: background photo + tagline]
+       ======================================================================== -->
+  <section class="hero" id="home">
+    <div class="wrap">
+      <div class="hero-inner">
+        <p class="eyebrow">Ann Arbor &middot; Est. 2011</p>
+        <h1>Where every visit <em>blooms</em> into confidence.</h1>
+        <p>
+          A calm, modern studio for hair, skin and bridal beauty. Our stylists blend
+          precision technique with unhurried care — so you leave looking like the best
+          version of yourself, not someone else's idea of you.
+        </p>
+        <div class="hero-actions">
+          <a href="#contact" class="btn btn--blush">Book an Appointment</a>
+          <a href="#services" class="btn btn--ghost" style="color:#fff;border-color:rgba(255,255,255,.45)">Explore Services</a>
+        </div>
+        <div class="hero-meta">
+          <span>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.2 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8L12 2z"/></svg>
+            4.9 average from 480+ reviews
+          </span>
+          <span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.7-7-10a7 7 0 1114 0c0 5.3-7 10-7 10z"/><circle cx="12" cy="11" r="2.6"/></svg>
+            218 Blossom Street, Ann Arbor
+          </span>
+          <span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>
+            Open today until 8:00 PM
+          </span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       3. SERVICES  [SWAP: six cards below — icons are inline SVG]
+       ======================================================================== -->
+  <section class="section" id="services">
+    <div class="wrap">
+      <div class="section-head center reveal">
+        <p class="eyebrow">What we do</p>
+        <h2>Services made for real life</h2>
+        <p>Everything under one roof, from a ten-minute tidy-up to a full bridal morning — booked with the same stylist every time, if you'd like.</p>
+      </div>
+
+      <div class="grid services-grid">
+
+        <!-- Service card 1 — Hair -->
+        <article class="card reveal">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="6" cy="18" r="3"/><circle cx="18" cy="18" r="3"/><path d="M8.1 15.9L20 4M15.9 15.9L4 4"/></svg>
+          </div>
+          <h3>Hair &amp; Colour</h3>
+          <p>Precision cuts, balayage, gloss and grey blending. Every colour service starts with a strand test and a proper consultation — no surprises at the mirror.</p>
+          <a href="#pricing" class="card-link">See pricing
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </article>
+
+        <!-- Service card 2 — Skin -->
+        <article class="card reveal">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M12 3c4 3.4 6 6.4 6 9a6 6 0 11-12 0c0-2.6 2-5.6 6-9z"/><path d="M9.5 13.5a2.6 2.6 0 002.5 2.6"/></svg>
+          </div>
+          <h3>Skin &amp; Facials</h3>
+          <p>Hydrating, brightening and acne-calming facials using pH-balanced professional lines. We build a home routine you can actually keep up with.</p>
+          <a href="#pricing" class="card-link">See pricing
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </article>
+
+        <!-- Service card 3 — Makeup -->
+        <article class="card reveal">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6l-1 5H10L9 3z"/><path d="M10 8h4l1 8a3 3 0 01-3 3h0a3 3 0 01-3-3l1-8z"/><path d="M9.5 14h5"/></svg>
+          </div>
+          <h3>Makeup Artistry</h3>
+          <p>Event, editorial and everyday looks matched to your skin tone in natural light. Includes a quick lesson so you can recreate it at home.</p>
+          <a href="#pricing" class="card-link">See pricing
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </article>
+
+        <!-- Service card 4 — Bridal -->
+        <article class="card reveal">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M8 8l4-5 4 5-4 13L8 8z"/><path d="M3.5 8h17M8 8l4 13 4-13"/></svg>
+          </div>
+          <h3>Bridal Studio</h3>
+          <p>Trials, wedding-day hair and makeup, and on-location service for the whole party. One lead artist stays with you from first pin to last photo.</p>
+          <a href="#pricing" class="card-link">See pricing
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </article>
+
+        <!-- Service card 5 — Nails -->
+        <article class="card reveal">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="8" y="3" width="8" height="18" rx="4"/><path d="M8.4 9h7.2"/></svg>
+          </div>
+          <h3>Nails &amp; Hands</h3>
+          <p>Gel, builder-gel and classic manicures with proper cuticle care. Tools are heat-sterilised between every single guest — no exceptions.</p>
+          <a href="#pricing" class="card-link">See pricing
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </article>
+
+        <!-- Service card 6 — Waxing -->
+        <article class="card reveal">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20c3-1.5 5-4 6-7M20 4c-2.5.6-5 2-7 4"/><path d="M13 8.5c2 .3 3.4 1.6 3.8 3.6.4 2.3-1 4.4-3.4 4.9-2.1.4-4-.8-4.6-2.6"/></svg>
+          </div>
+          <h3>Waxing &amp; Threading</h3>
+          <p>Gentle hard wax and precision brow threading in private rooms, with soothing post-care included. Sensitive skin? Tell us and we'll patch test.</p>
+          <a href="#pricing" class="card-link">See pricing
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       4. ABOUT + STAT COUNTERS  [SWAP: story, photos, numbers]
+       ======================================================================== -->
+  <section class="section section--alt" id="about">
+    <div class="wrap">
+      <div class="about">
+
+        <div class="about-media reveal">
+          <!-- [SWAP] main salon interior photo -->
+          <div class="ph ph--2"><span class="ph-mark">Salon Interior</span></div>
+          <!-- [SWAP] secondary detail photo (hidden on small screens) -->
+          <div class="ph ph--5"><span class="ph-mark">Styling</span></div>
+          <div class="about-badge"><b>14</b> years on Blossom Street</div>
+        </div>
+
+        <div class="reveal">
+          <p class="eyebrow">Our story</p>
+          <h2>A neighbourhood salon that grew up with its guests</h2>
+          <p class="lead">
+            Bloom &amp; Blush started in 2011 as a two-chair studio above a bakery, with
+            one rule that hasn't changed: nobody gets rushed.
+          </p>
+          <p>
+            Today our team of eleven works out of a light-filled space on Blossom Street,
+            but the pace is still deliberately unhurried. We book longer appointments than
+            most salons because a good consultation saves a bad colour correction — and
+            because the chair should feel like the calmest half of your week.
+          </p>
+          <p>
+            Every stylist trains four days a year with visiting educators, we're a fully
+            cruelty-free product house, and we refill and recycle everything the city
+            will take.
+          </p>
+
+          <!-- Stat counters — [SWAP] data-count values + labels; they animate on scroll -->
+          <div class="stats" id="stats">
+            <div>
+              <div class="stat-num"><span data-count="14">0</span></div>
+              <div class="stat-label">Years Experience</div>
+            </div>
+            <div>
+              <div class="stat-num"><span data-count="9600">0</span><span class="suffix">+</span></div>
+              <div class="stat-label">Happy Clients</div>
+            </div>
+            <div>
+              <div class="stat-num"><span data-count="11">0</span></div>
+              <div class="stat-label">Expert Stylists</div>
+            </div>
+          </div>
+
+          <p class="sig">Mara Whitfield<small>Founder &amp; Creative Director</small></p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       5. GALLERY  [SWAP: tiles + categories. Filter buttons match data-cat]
+       ======================================================================== -->
+  <section class="section" id="gallery">
+    <div class="wrap">
+      <div class="section-head center reveal">
+        <p class="eyebrow">Our work</p>
+        <h2>Recent from the chair</h2>
+        <p>A small sample of the last few weeks. Tap a category to filter.</p>
+      </div>
+
+      <div class="filters reveal" id="filters" role="group" aria-label="Filter gallery by category">
+        <button class="filter is-active" data-filter="all">All</button>
+        <button class="filter" data-filter="hair">Hair</button>
+        <button class="filter" data-filter="bridal">Bridal</button>
+        <button class="filter" data-filter="makeup">Makeup</button>
+        <button class="filter" data-filter="nails">Nails</button>
+        <button class="filter" data-filter="skin">Skin</button>
+      </div>
+
+      <div class="gallery reveal">
+        <!-- [SWAP] each .tile: replace the .ph div with <img src="..." alt="..."> -->
+        <figure class="tile ph ph--3 tall" data-cat="hair">
+          <span class="tile-chip">Hair</span>
+          <figcaption class="tile-overlay">
+            <span class="tile-cat">Hair</span>
+            <span class="tile-title">Warm caramel balayage</span>
+          </figcaption>
+        </figure>
+
+        <figure class="tile ph ph--5 wide" data-cat="bridal">
+          <span class="tile-chip">Bridal</span>
+          <figcaption class="tile-overlay">
+            <span class="tile-cat">Bridal</span>
+            <span class="tile-title">Soft updo with fresh stems</span>
+          </figcaption>
+        </figure>
+
+        <figure class="tile ph ph--4" data-cat="makeup">
+          <span class="tile-chip">Makeup</span>
+          <figcaption class="tile-overlay">
+            <span class="tile-cat">Makeup</span>
+            <span class="tile-title">Golden-hour glow</span>
+          </figcaption>
+        </figure>
+
+        <figure class="tile ph ph--6" data-cat="nails">
+          <span class="tile-chip">Nails</span>
+          <figcaption class="tile-overlay">
+            <span class="tile-cat">Nails</span>
+            <span class="tile-title">Milky almond gel set</span>
+          </figcaption>
+        </figure>
+
+        <figure class="tile ph ph--2" data-cat="hair">
+          <span class="tile-chip">Hair</span>
+          <figcaption class="tile-overlay">
+            <span class="tile-cat">Hair</span>
+            <span class="tile-title">Blunt collarbone bob</span>
+          </figcaption>
+        </figure>
+
+        <figure class="tile ph ph--5" data-cat="skin">
+          <span class="tile-chip">Skin</span>
+          <figcaption class="tile-overlay">
+            <span class="tile-cat">Skin</span>
+            <span class="tile-title">Hydrating glass facial</span>
+          </figcaption>
+        </figure>
+
+        <figure class="tile ph ph--3" data-cat="bridal">
+          <span class="tile-chip">Bridal</span>
+          <figcaption class="tile-overlay">
+            <span class="tile-cat">Bridal</span>
+            <span class="tile-title">Trial morning, Kerrytown</span>
+          </figcaption>
+        </figure>
+
+        <figure class="tile ph ph--4" data-cat="makeup">
+          <span class="tile-chip">Makeup</span>
+          <figcaption class="tile-overlay">
+            <span class="tile-cat">Makeup</span>
+            <span class="tile-title">Editorial smoked liner</span>
+          </figcaption>
+        </figure>
+
+        <figure class="tile ph ph--6" data-cat="hair">
+          <span class="tile-chip">Hair</span>
+          <figcaption class="tile-overlay">
+            <span class="tile-cat">Hair</span>
+            <span class="tile-title">Copper gloss refresh</span>
+          </figcaption>
+        </figure>
+
+        <figure class="tile ph ph--2" data-cat="nails">
+          <span class="tile-chip">Nails</span>
+          <figcaption class="tile-overlay">
+            <span class="tile-cat">Nails</span>
+            <span class="tile-title">Deep berry short square</span>
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       6. PRICING  [SWAP: rows below — name / description / price]
+       ======================================================================== -->
+  <section class="section section--alt" id="pricing">
+    <div class="wrap">
+      <div class="section-head center reveal">
+        <p class="eyebrow">Menu &amp; rates</p>
+        <h2>Straightforward pricing</h2>
+        <p>Prices start from the figures below and are confirmed at consultation — long or very thick hair may add a little product time.</p>
+      </div>
+
+      <div class="price-grid">
+
+        <!-- Pricing card 1 -->
+        <div class="price-card reveal">
+          <div class="price-head">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="6" cy="18" r="3"/><circle cx="18" cy="18" r="3"/><path d="M8.1 15.9L20 4M15.9 15.9L4 4"/></svg>
+            <h3>Hair &amp; Colour</h3>
+          </div>
+          <div class="price-row">
+            <span class="price-info">
+              <span class="price-name">Cut &amp; Blow Dry</span>
+              <span class="price-desc">Consultation, wash, cut, finish &middot; 60 min</span>
+            </span>
+            <span class="price-val">$65</span>
+          </div>
+          <div class="price-row">
+            <span class="price-info">
+              <span class="price-name">Full Balayage</span>
+              <span class="price-desc">Hand-painted lightening + gloss &middot; 3 hrs</span>
+            </span>
+            <span class="price-val">$185</span>
+          </div>
+          <div class="price-row">
+            <span class="price-info">
+              <span class="price-name">Root Touch-Up</span>
+              <span class="price-desc">Single-process colour, up to 1 inch &middot; 90 min</span>
+            </span>
+            <span class="price-val">$85</span>
+          </div>
+        </div>
+
+        <!-- Pricing card 2 — featured (dark) -->
+        <div class="price-card is-featured reveal">
+          <span class="price-tag">Most booked</span>
+          <div class="price-head">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M8 8l4-5 4 5-4 13L8 8z"/><path d="M3.5 8h17M8 8l4 13 4-13"/></svg>
+            <h3>Bridal &amp; Makeup</h3>
+          </div>
+          <div class="price-row">
+            <span class="price-info">
+              <span class="price-name">Bridal Hair &amp; Makeup</span>
+              <span class="price-desc">Includes one trial session &middot; 4 hrs total</span>
+            </span>
+            <span class="price-val">$250</span>
+          </div>
+          <div class="price-row">
+            <span class="price-info">
+              <span class="price-name">Event Makeup</span>
+              <span class="price-desc">Full face, lashes included &middot; 60 min</span>
+            </span>
+            <span class="price-val">$75</span>
+          </div>
+          <div class="price-row">
+            <span class="price-info">
+              <span class="price-name">Bridal Party (per guest)</span>
+              <span class="price-desc">Hair or makeup, on location &middot; 45 min</span>
+            </span>
+            <span class="price-val">$90</span>
+          </div>
+        </div>
+
+        <!-- Pricing card 3 -->
+        <div class="price-card reveal">
+          <div class="price-head">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M12 3c4 3.4 6 6.4 6 9a6 6 0 11-12 0c0-2.6 2-5.6 6-9z"/></svg>
+            <h3>Skin, Nails &amp; Waxing</h3>
+          </div>
+          <div class="price-row">
+            <span class="price-info">
+              <span class="price-name">Signature Facial</span>
+              <span class="price-desc">Cleanse, exfoliate, mask, massage &middot; 60 min</span>
+            </span>
+            <span class="price-val">$95</span>
+          </div>
+          <div class="price-row">
+            <span class="price-info">
+              <span class="price-name">Gel Manicure</span>
+              <span class="price-desc">Shape, cuticle care, gel colour &middot; 50 min</span>
+            </span>
+            <span class="price-val">$45</span>
+          </div>
+          <div class="price-row">
+            <span class="price-info">
+              <span class="price-name">Brow Shape &amp; Tint</span>
+              <span class="price-desc">Threading or wax, plus tint &middot; 30 min</span>
+            </span>
+            <span class="price-val">$35</span>
+          </div>
+        </div>
+
+      </div>
+
+      <p class="price-note reveal">
+        First visit? Mention <strong>&ldquo;Bloom10&rdquo;</strong> when you book for 10% off your first service.
+        <a href="#contact">Questions about a package?</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       7. TESTIMONIALS (carousel)  [SWAP: quotes below; JS handles the rest]
+       ======================================================================== -->
+  <section class="section section--dark" id="testimonials">
+    <div class="wrap">
+      <div class="section-head center reveal">
+        <p class="eyebrow" style="color:var(--blush)">Kind words</p>
+        <h2>What our guests say</h2>
+        <p style="color:rgba(233,225,220,.65)">Verified reviews from clients who let us share them.</p>
+      </div>
+
+      <div class="carousel reveal" id="carousel">
+        <div class="track" id="track">
+
+          <!-- Testimonial 1 -->
+          <div class="slide">
+            <figure class="quote">
+              <div class="stars" aria-label="5 out of 5 stars">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.2 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8L12 2z"/></svg>
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.2 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8L12 2z"/></svg>
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.2 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8L12 2z"/></svg>
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.2 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8L12 2z"/></svg>
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.2 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8L12 2z"/></svg>
+              </div>
+              <div class="quote-mark" aria-hidden="true">&ldquo;</div>
+              <p>I came in with three years of box dye and left with the most natural colour I've had since high school. Priya explained every step instead of just nodding at my photos.</p>
+              <figcaption class="quote-by">
+                <span class="avatar" aria-hidden="true">SR</span>
+                <span>
+                  <span class="quote-name">Sana Rahman</span><br>
+                  <span class="quote-role">Colour correction &middot; Kerrytown</span>
+                </span>
+              </figcaption>
+            </figure>
+          </div>
+
+          <!-- Testimonial 2 -->
+          <div class="slide">
+            <figure class="quote">
+              <div class="stars" aria-label="5 out of 5 stars">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.2 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8L12 2z"/></svg>
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.2 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8L12 2z"/></svg>
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.2 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8L12 2z"/></svg>
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.2 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8L12 2z"/></svg>
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.2 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8L12 2z"/></svg>
+              </div>
+              <div class="quote-mark" aria-hidden="true">&ldquo;</div>
+              <p>They did hair and makeup for six of us on the morning of my wedding and finished twenty minutes early. My makeup survived an outdoor ceremony in July — that's the whole review.</p>
+              <figcaption class="quote-by">
+                <span class="avatar" aria-hidden="true">EM</span>
+                <span>
+                  <span class="quote-name">Elena Marchetti</span><br>
+                  <span class="quote-role">Bridal party of six &middot; June 2025</span>
+                </span>
+              </figcaption>
+            </figure>
+          </div>
+
+          <!-- Testimonial 3 -->
+          <div class="slide">
+            <figure class="quote">
+              <div class="stars" aria-label="4 out of 5 stars">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.2 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8L12 2z"/></svg>
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.2 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8L12 2z"/></svg>
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.2 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8L12 2z"/></svg>
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.2 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8L12 2z"/></svg>
+                <svg viewBox="0 0 24 24" fill="currentColor" opacity=".32"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.2 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8L12 2z"/></svg>
+              </div>
+              <div class="quote-mark" aria-hidden="true">&ldquo;</div>
+              <p>Monthly facials here cleared up jaw breakouts two dermatologists shrugged at. Parking on Blossom is genuinely awful, which is the only star I'm holding back.</p>
+              <figcaption class="quote-by">
+                <span class="avatar" aria-hidden="true">DO</span>
+                <span>
+                  <span class="quote-name">Danielle Okafor</span><br>
+                  <span class="quote-role">Signature facial &middot; regular since 2022</span>
+                </span>
+              </figcaption>
+            </figure>
+          </div>
+
+          <!-- Testimonial 4 -->
+          <div class="slide">
+            <figure class="quote">
+              <div class="stars" aria-label="5 out of 5 stars">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.2 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8L12 2z"/></svg>
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.2 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8L12 2z"/></svg>
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.2 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8L12 2z"/></svg>
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.2 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8L12 2z"/></svg>
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.2 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8L12 2z"/></svg>
+              </div>
+              <div class="quote-mark" aria-hidden="true">&ldquo;</div>
+              <p>My daughter has sensory issues and they let us come in before opening so the dryers weren't running. She actually asks to go back now.</p>
+              <figcaption class="quote-by">
+                <span class="avatar" aria-hidden="true">TL</span>
+                <span>
+                  <span class="quote-name">Thea Lindqvist</span><br>
+                  <span class="quote-role">Family cuts &middot; Burns Park</span>
+                </span>
+              </figcaption>
+            </figure>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="carousel-nav reveal">
+        <button class="c-btn" id="prev" aria-label="Previous testimonials">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+        </button>
+        <div class="dots" id="dots"></div>
+        <button class="c-btn" id="next" aria-label="Next testimonials">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       8. LOCATION / CONTACT  [SWAP: address, phone, WhatsApp, hours, map]
+       ======================================================================== -->
+  <section class="section" id="contact">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">Visit us</p>
+        <h2>Find the studio</h2>
+        <p>Two blocks from the Blossom Street parking structure — validated parking for services over 90 minutes.</p>
+      </div>
+
+      <div class="contact">
+
+        <div class="reveal">
+          <div class="info-list">
+
+            <div class="info">
+              <span class="info-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7-4.7-7-10a7 7 0 1114 0c0 5.3-7 10-7 10z"/><circle cx="12" cy="11" r="2.6"/></svg>
+              </span>
+              <div>
+                <h4>Address</h4>
+                <p>218 Blossom Street, Suite 4<br>Ann Arbor, MI 48104</p>
+              </div>
+            </div>
+
+            <div class="info">
+              <span class="info-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 4h4l2 5-2.5 1.5a12 12 0 005 5L15 13l5 2v4a1 1 0 01-1.1 1A16 16 0 014 5.1 1 1 0 015 4z"/></svg>
+              </span>
+              <div>
+                <h4>Phone</h4>
+                <!-- [SWAP] tel: link must match the displayed number -->
+                <p><a href="tel:+17345550182">(734) 555-0182</a></p>
+              </div>
+            </div>
+
+            <div class="info">
+              <span class="info-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.03 2C6.9 2 2.74 6.16 2.74 11.28c0 1.8.5 3.48 1.38 4.92L2.5 22l5.96-1.56a9.2 9.2 0 003.57.72c5.12 0 9.28-4.16 9.28-9.28S17.15 2 12.03 2zm0 16.72c-1.1 0-2.18-.29-3.12-.85l-.22-.13-3.54.93.95-3.45-.15-.23a7.4 7.4 0 01-1.14-3.96 7.44 7.44 0 1114.87 0c0 4.1-3.34 7.69-7.65 7.69zm4.2-5.54c-.23-.12-1.36-.67-1.57-.75-.21-.08-.36-.11-.51.12s-.59.75-.72.9c-.13.16-.26.18-.49.06a6.1 6.1 0 01-1.8-1.11 6.75 6.75 0 01-1.24-1.55c-.13-.23-.01-.35.1-.47.1-.1.23-.26.34-.4.11-.13.15-.22.23-.38.08-.15.04-.29-.02-.41-.06-.12-.51-1.24-.7-1.69-.19-.45-.37-.39-.51-.4h-.44c-.15 0-.4.06-.6.29-.21.23-.79.77-.79 1.88s.81 2.18.92 2.33c.12.16 1.6 2.44 3.87 3.42.54.23.96.37 1.29.48.54.17 1.04.15 1.43.09.44-.07 1.36-.55 1.55-1.09.19-.54.19-1 .13-1.1-.05-.1-.2-.16-.43-.28z"/></svg>
+              </span>
+              <div>
+                <h4>WhatsApp</h4>
+                <!-- [SWAP] wa.me link uses digits only, with country code -->
+                <p><a href="https://wa.me/17345550182" target="_blank" rel="noopener">+1 734 555 0182</a> &middot; fastest for rescheduling</p>
+              </div>
+            </div>
+
+            <div class="info">
+              <span class="info-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 8l9 6 9-6"/></svg>
+              </span>
+              <div>
+                <h4>Email</h4>
+                <p><a href="mailto:hello@bloomandblush.example">hello@bloomandblush.example</a></p>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Opening hours -->
+          <div class="hours">
+            <h4>Opening Hours</h4>
+            <ul>
+              <li><span class="day">Monday</span><span class="time closed">Closed</span></li>
+              <li><span class="day">Tuesday &ndash; Thursday</span><span class="time">9:00 AM &ndash; 8:00 PM</span></li>
+              <li><span class="day">Friday</span><span class="time">9:00 AM &ndash; 9:00 PM</span></li>
+              <li><span class="day">Saturday</span><span class="time">8:00 AM &ndash; 6:00 PM</span></li>
+              <li><span class="day">Sunday</span><span class="time">10:00 AM &ndash; 4:00 PM</span></li>
+            </ul>
+          </div>
+
+          <div class="contact-actions">
+            <a href="tel:+17345550182" class="btn btn--primary">Call to Book</a>
+            <a href="https://wa.me/17345550182" target="_blank" rel="noopener" class="btn btn--ghost">Message on WhatsApp</a>
+          </div>
+        </div>
+
+        <!-- Map placeholder — [SWAP] replace this whole block with a real embed:
+             <iframe class="map" src="https://www.google.com/maps/embed?pb=..."
+                     width="100%" height="430" style="border:0" loading="lazy"
+                     referrerpolicy="no-referrer-when-downgrade"
+                     title="Bloom & Blush Salon location"></iframe> -->
+        <div class="map reveal" role="img" aria-label="Map showing 218 Blossom Street, Ann Arbor">
+          <div class="map-pin">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 22s7-5.4 7-11a7 7 0 10-14 0c0 5.6 7 11 7 11z"/><circle cx="12" cy="11" r="2.7" fill="#fff"/></svg>
+          </div>
+          <div class="map-card">
+            <span>
+              <strong>Bloom &amp; Blush Salon</strong>
+              <span>218 Blossom Street, Suite 4 &middot; Ann Arbor, MI</span>
+            </span>
+            <a href="https://maps.google.com/?q=218+Blossom+Street+Ann+Arbor+MI" target="_blank" rel="noopener" class="btn btn--blush btn--sm">Directions</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ==========================================================================
+     9. FOOTER  [SWAP: links, socials, copyright]
+     ========================================================================== -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+
+      <div>
+        <a href="#home" class="logo">
+          <span class="logo-mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c1.7 0 3 1.3 3 3 0 .6-.2 1.2-.5 1.7C15.2 6.3 16 6 17 6c1.7 0 3 1.3 3 3s-1.3 3-3 3c-.6 0-1.2-.2-1.7-.5.3.5.7 1.2.7 2.5 0 1.7-1.3 3-3 3s-3-1.3-3-3c0-1.3.4-2 .7-2.5-.5.3-1.1.5-1.7.5-1.7 0-3-1.3-3-3s1.3-3 3-3c1 0 1.8.3 2.5.7C9.2 6.2 9 5.6 9 5c0-1.7 1.3-3 3-3zm0 8.2a1.8 1.8 0 100 3.6 1.8 1.8 0 000-3.6z"/><path d="M11.2 16.5h1.6L13.4 22h-2.8l.6-5.5z" opacity=".75"/></svg>
+          </span>
+          <span class="logo-text">
+            <span class="logo-name">Bloom <span class="amp">&amp;</span> Blush</span>
+            <span class="logo-sub">Salon &amp; Studio</span>
+          </span>
+        </a>
+        <p style="margin-top:18px">A calm, modern salon on Blossom Street — hair, skin, makeup and bridal, without the rush.</p>
+        <div class="socials">
+          <!-- [SWAP] real social URLs -->
+          <a href="#" class="social" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1" fill="currentColor" stroke="none"/></svg>
+          </a>
+          <a href="#" class="social" aria-label="Facebook">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 9h3V6h-3c-2.2 0-4 1.8-4 4v2H8v3h2v7h3v-7h2.6l.4-3H13v-2c0-.6.4-1 1-1z"/></svg>
+          </a>
+          <a href="#" class="social" aria-label="Pinterest">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 00-3.6 19.3c-.1-.8-.2-2 0-2.9l1.3-5.4s-.3-.6-.3-1.6c0-1.5.9-2.6 1.9-2.6.9 0 1.3.7 1.3 1.5 0 .9-.6 2.3-.9 3.6-.3 1.1.5 2 1.6 2 2 0 3.4-2.5 3.4-5.5 0-2.3-1.5-4-4.3-4-3.1 0-5 2.3-5 4.9 0 .9.3 1.5.7 2 .2.2.2.3.1.6l-.2.9c-.1.3-.3.4-.6.2-1.3-.5-1.9-2-1.9-3.6 0-2.7 2.3-5.9 6.8-5.9 3.6 0 6 2.6 6 5.4 0 3.7-2.1 6.5-5.1 6.5-1 0-2-.6-2.4-1.2l-.6 2.5c-.2.8-.7 1.8-1.1 2.4A10 10 0 1012 2z"/></svg>
+          </a>
+          <a href="#" class="social" aria-label="TikTok">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 3c.4 2 1.6 3.4 3.5 3.6v2.7c-1.3.1-2.5-.3-3.6-1v5.9a5.6 5.6 0 11-5.6-5.6c.3 0 .6 0 .9.1v2.9a2.8 2.8 0 101.9 2.6V3h2.9z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div>
+        <h4>Explore</h4>
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#gallery">Gallery</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+          <li><a href="#about">About</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Services</h4>
+        <ul>
+          <li><a href="#services">Hair &amp; Colour</a></li>
+          <li><a href="#services">Skin &amp; Facials</a></li>
+          <li><a href="#services">Makeup Artistry</a></li>
+          <li><a href="#services">Bridal Studio</a></li>
+          <li><a href="#services">Nails &amp; Waxing</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Visit</h4>
+        <ul>
+          <li>218 Blossom Street, Suite 4<br>Ann Arbor, MI 48104</li>
+          <li><a href="tel:+17345550182">(734) 555-0182</a></li>
+          <li><a href="https://wa.me/17345550182" target="_blank" rel="noopener">WhatsApp us</a></li>
+          <li><a href="mailto:hello@bloomandblush.example">hello@bloomandblush.example</a></li>
+          <li>Tue &ndash; Sun &middot; Closed Mondays</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span>&copy; <span id="year">2026</span> Bloom &amp; Blush Salon. All rights reserved.</span>
+      <span><a href="#">Privacy Policy</a> &middot; <a href="#">Cancellation Policy</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ============================================================================
+   JS — only what the interactive bits need. No libraries.
+     A. mobile nav        B. sticky header + active link
+     C. gallery filter    D. testimonial carousel
+     E. stat counters     F. scroll reveal      G. footer year
+   ============================================================================ */
+(function () {
+  'use strict';
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* --- A. Mobile navigation ------------------------------------------------ */
+  var nav = document.getElementById('nav');
+  var toggle = document.getElementById('navToggle');
+
+  function closeNav() {
+    nav.classList.remove('is-open');
+    toggle.setAttribute('aria-expanded', 'false');
+  }
+  toggle.addEventListener('click', function () {
+    var open = nav.classList.toggle('is-open');
+    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  nav.addEventListener('click', function (e) {
+    if (e.target.closest('a')) closeNav();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeNav();
+  });
+  window.addEventListener('resize', function () {
+    if (window.innerWidth > 860) closeNav();
+  });
+
+  /* --- B. Sticky header shadow + active nav link --------------------------- */
+  var header = document.getElementById('header');
+  var links = Array.prototype.slice.call(nav.querySelectorAll('a[href^="#"]'));
+  var sections = links
+    .map(function (a) { return document.querySelector(a.getAttribute('href')); })
+    .filter(Boolean);
+
+  function onScroll() {
+    header.classList.toggle('is-stuck', window.scrollY > 8);
+
+    var pos = window.scrollY + header.offsetHeight + 90;
+    var currentId = '';
+    sections.forEach(function (sec) {
+      if (sec.offsetTop <= pos) currentId = sec.id;
+    });
+    links.forEach(function (a) {
+      a.classList.toggle('is-active', a.getAttribute('href') === '#' + currentId && !a.classList.contains('btn'));
+    });
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  /* --- C. Gallery filter ---------------------------------------------------
+     Each tile carries data-cat; each button carries data-filter. "all" shows
+     everything. Add a new category by adding a button + matching data-cat.   */
+  var filterBar = document.getElementById('filters');
+  var tiles = Array.prototype.slice.call(document.querySelectorAll('.tile'));
+
+  filterBar.addEventListener('click', function (e) {
+    var btn = e.target.closest('.filter');
+    if (!btn) return;
+    Array.prototype.forEach.call(filterBar.querySelectorAll('.filter'), function (b) { b.classList.remove('is-active'); });
+    btn.classList.add('is-active');
+
+    var want = btn.dataset.filter;
+    tiles.forEach(function (tile) {
+      tile.classList.toggle('is-hidden', want !== 'all' && tile.dataset.cat !== want);
+    });
+  });
+
+  /* --- D. Testimonial carousel --------------------------------------------
+     Slides per view adapt to viewport (3 / 2 / 1). Autoplays, pauses on
+     hover or focus, supports arrows, dots, keyboard and touch swipe.        */
+  var track = document.getElementById('track');
+  var carousel = document.getElementById('carousel');
+  var dotsBox = document.getElementById('dots');
+  var slides = Array.prototype.slice.call(track.children);
+  var index = 0, timer = null;
+
+  function perView() {
+    if (window.innerWidth <= 700) return 1;
+    if (window.innerWidth <= 1024) return 2;
+    return 3;
+  }
+  function pageCount() { return Math.max(1, slides.length - perView() + 1); }
+
+  function buildDots() {
+    dotsBox.innerHTML = '';
+    for (var i = 0; i < pageCount(); i++) {
+      var d = document.createElement('button');
+      d.className = 'dot';
+      d.type = 'button';
+      d.setAttribute('aria-label', 'Go to testimonial ' + (i + 1));
+      d.dataset.index = i;
+      dotsBox.appendChild(d);
+    }
+  }
+  function go(i) {
+    var max = pageCount() - 1;
+    index = i < 0 ? max : (i > max ? 0 : i);
+    track.style.transform = 'translateX(-' + (index * (100 / perView())) + '%)';
+    Array.prototype.forEach.call(dotsBox.children, function (d, n) {
+      d.classList.toggle('is-active', n === index);
+    });
+  }
+  function play() {
+    if (reduceMotion) return;
+    stop();
+    timer = setInterval(function () { go(index + 1); }, 6000);
+  }
+  function stop() { if (timer) { clearInterval(timer); timer = null; } }
+
+  document.getElementById('prev').addEventListener('click', function () { go(index - 1); play(); });
+  document.getElementById('next').addEventListener('click', function () { go(index + 1); play(); });
+  dotsBox.addEventListener('click', function (e) {
+    var d = e.target.closest('.dot');
+    if (d) { go(+d.dataset.index); play(); }
+  });
+  carousel.addEventListener('mouseenter', stop);
+  carousel.addEventListener('mouseleave', play);
+  carousel.addEventListener('focusin', stop);
+  carousel.addEventListener('focusout', play);
+
+  // touch swipe
+  var startX = null;
+  carousel.addEventListener('touchstart', function (e) { startX = e.touches[0].clientX; stop(); }, { passive: true });
+  carousel.addEventListener('touchend', function (e) {
+    if (startX === null) return;
+    var dx = e.changedTouches[0].clientX - startX;
+    if (Math.abs(dx) > 45) go(index + (dx < 0 ? 1 : -1));
+    startX = null;
+    play();
+  });
+
+  var lastPerView = perView();
+  window.addEventListener('resize', function () {
+    if (perView() !== lastPerView) { lastPerView = perView(); buildDots(); go(0); }
+  });
+
+  buildDots();
+  go(0);
+  play();
+
+  /* --- E. Stat counters (animate once, when scrolled into view) ------------ */
+  function countUp(el) {
+    var target = parseInt(el.dataset.count, 10);
+    if (reduceMotion) { el.textContent = target.toLocaleString(); return; }
+    var start = performance.now(), dur = 1600;
+    (function tick(now) {
+      var p = Math.min((now - start) / dur, 1);
+      var eased = 1 - Math.pow(1 - p, 3);           // ease-out cubic
+      el.textContent = Math.round(target * eased).toLocaleString();
+      if (p < 1) requestAnimationFrame(tick);
+    })(start);
+  }
+
+  /* --- F. Scroll reveal ---------------------------------------------------- */
+  var revealEls = document.querySelectorAll('.reveal');
+
+  if ('IntersectionObserver' in window) {
+    var revealObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-in');
+        revealObserver.unobserve(entry.target);
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    // stagger cards inside a grid so they cascade in
+    Array.prototype.forEach.call(revealEls, function (el, i) {
+      var siblings = el.parentElement ? el.parentElement.children.length : 1;
+      if (siblings > 2) el.style.transitionDelay = ((i % 3) * 90) + 'ms';
+      revealObserver.observe(el);
+    });
+
+    var statsBox = document.getElementById('stats');
+    var statObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        Array.prototype.forEach.call(entry.target.querySelectorAll('[data-count]'), countUp);
+        statObserver.unobserve(entry.target);
+      });
+    }, { threshold: 0.4 });
+    statObserver.observe(statsBox);
+  } else {
+    // no IntersectionObserver (very old browsers): show everything immediately
+    Array.prototype.forEach.call(revealEls, function (el) { el.classList.add('is-in'); });
+    Array.prototype.forEach.call(document.querySelectorAll('[data-count]'), function (el) {
+      el.textContent = parseInt(el.getAttribute('data-count'), 10).toLocaleString();
+    });
+  }
+
+  /* --- G. Footer year ------------------------------------------------------ */
+  document.getElementById('year').textContent = new Date().getFullYear();
+})();
+</script>
+</body>
+</html>

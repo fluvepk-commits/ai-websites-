@@ -22,10 +22,21 @@ picks them up — no code changes needed.
 | `bridal-emerald.jpg`    | Standard | Makeup |
 | `bridal-reception.jpg`  | Standard | Bridal |
 
+## Hero
+
+| File | Slot |
+|------|------|
+| `../video/hero.mp4`     | Hero background clip (muted, looping) |
+| `hero-poster.jpg`       | Still shown until the clip's first frame is ready |
+
+A portrait (9:16) clip sits in a right-hand panel on desktop and goes
+full-bleed on narrower screens. Swapping in a landscape clip? Widen
+`.hero-video` to `width:100%` and drop the mask.
+
 All gallery photos want a portrait or square crop, ~900–1200px wide.
 
-All nine files above are now in place. Four gallery tiles remain
-placeholders — see the last section.
+All the files above are in place and every gallery tile now carries a real
+photo.
 
 ## Export settings
 
@@ -40,7 +51,9 @@ screen-recording chrome before saving; the tile will not hide them.
 Any file that is missing falls back to the blush gradient placeholder, so
 the page never shows a broken image.
 
-## Filling the four remaining placeholder tiles
+## Adding another gallery tile
 
-Copy the pattern from a tile that already has a photo: add an `<img>` as the
-first child of the `<figure>` and add `has-photo` to its class list.
+Copy any existing `<figure class="tile ...">` block, point its `<img>` at the
+new file, and set `data-cat` to one of: hair, bridal, makeup, nails. Adding a
+new category also needs a matching `<button class="filter">` in the filter
+row — a filter with no tiles behind it shows an empty grid.

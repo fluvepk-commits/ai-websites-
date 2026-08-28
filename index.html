@@ -232,16 +232,34 @@ figure,figcaption{margin:0}
 .hero{
   position:relative; min-height:calc(100svh - var(--header-h)); display:flex; align-items:center;
   padding:clamp(70px,10vw,120px) 0;
-  /* [SWAP] real photo: background-image:linear-gradient(...), url('hero.jpg'); */
+  /* Gradient sits under the video: it shows while the video loads, and stays
+     as the fallback if the file is missing or autoplay is blocked. */
   background-image:
-    linear-gradient(100deg, rgba(29,25,23,.72) 0%, rgba(29,25,23,.46) 46%, rgba(184,123,116,.30) 100%),
     radial-gradient(70% 80% at 78% 26%, rgba(231,198,194,.55), rgba(231,198,194,0) 62%),
     linear-gradient(155deg,#4A3B37 0%,#7A5C55 42%,#C79A93 78%,#E7C6C2 100%);
   background-size:cover; background-position:center;
   color:#fff; overflow:hidden;
 }
-.hero::after{ /* film-grain-ish texture over the "photo" */
-  content:""; position:absolute; inset:0; pointer-events:none;
+/* [SWAP] hero video — replace video/hero.mp4 with the client's own clip.
+   A portrait (9:16) clip is centre-cropped on wide screens; object-position
+   keeps the subject's face inside the visible band. */
+.hero-video{
+  position:absolute; top:0; right:0; bottom:0; left:auto;
+  width:min(56%,860px); height:100%;
+  object-fit:cover; object-position:center 22%;
+  z-index:0; pointer-events:none;
+  /* feather the left edge so the footage melts into the dark side, no seam */
+  -webkit-mask-image:linear-gradient(to right, transparent 0%, rgba(0,0,0,.55) 14%, #000 34%);
+          mask-image:linear-gradient(to right, transparent 0%, rgba(0,0,0,.55) 14%, #000 34%);
+}
+.hero::before{ /* scrim: dark behind the headline, fading off over the footage */
+  content:""; position:absolute; inset:0; z-index:1; pointer-events:none;
+  background:linear-gradient(95deg,
+    rgba(29,25,23,.97) 0%, rgba(29,25,23,.95) 30%, rgba(29,25,23,.78) 45%,
+    rgba(29,25,23,.38) 58%, rgba(29,25,23,.14) 72%, rgba(29,25,23,.30) 100%);
+}
+.hero::after{ /* film-grain-ish texture over the footage */
+  content:""; position:absolute; inset:0; z-index:1; pointer-events:none;
   background:repeating-linear-gradient(112deg, rgba(255,255,255,.05) 0 1px, rgba(255,255,255,0) 1px 9px);
 }
 .hero .wrap{position:relative; z-index:2}
@@ -515,6 +533,10 @@ figure,figcaption{margin:0}
    13. RESPONSIVE
    =========================================================================== */
 @media (max-width:1024px){
+  /* not enough width for a side panel — go full-bleed and scrim top-to-bottom */
+  .hero-video{left:0; width:100%; object-position:center 18%;
+              -webkit-mask-image:none; mask-image:none}
+  .hero::before{background:linear-gradient(180deg, rgba(29,25,23,.86) 0%, rgba(29,25,23,.58) 45%, rgba(29,25,23,.78) 100%)}
   .gallery{grid-template-columns:repeat(3,1fr)}
   .footer-grid{grid-template-columns:1fr 1fr; gap:34px}
   .slide{flex-basis:50%}
@@ -545,6 +567,7 @@ figure,figcaption{margin:0}
 }
 @media (max-width:700px){
   :root{--header-h:68px}
+  .hero-video{object-position:center}   /* portrait screen matches the clip */
   .gallery{grid-template-columns:repeat(2,1fr); gap:12px}
   .tile{min-height:170px}
   .tile.tall{grid-row:span 1; min-height:170px}
@@ -615,6 +638,16 @@ figure,figcaption{margin:0}
        2. HERO  [SWAP: background photo + tagline]
        ======================================================================== -->
   <section class="hero" id="home">
+
+    <!-- [SWAP] Hero video. muted + playsinline are what let it autoplay on
+         mobile. The poster shows until the first frame is ready; if the file
+         fails to load the video removes itself and the gradient takes over. -->
+    <video class="hero-video" autoplay muted loop playsinline preload="metadata"
+           poster="images/hero-poster.jpg" aria-hidden="true" tabindex="-1"
+           onerror="this.remove();">
+      <source src="video/hero.mp4" type="video/mp4">
+    </video>
+
     <div class="wrap">
       <div class="hero-inner">
         <p class="eyebrow">Ann Arbor &middot; Est. 2011</p>
@@ -817,7 +850,6 @@ figure,figcaption{margin:0}
         <button class="filter" data-filter="bridal">Bridal</button>
         <button class="filter" data-filter="makeup">Makeup</button>
         <button class="filter" data-filter="nails">Nails</button>
-        <button class="filter" data-filter="skin">Skin</button>
       </div>
 
       <div class="gallery reveal">
@@ -894,38 +926,6 @@ figure,figcaption{margin:0}
           <figcaption class="tile-overlay">
             <span class="tile-cat">Bridal</span>
             <span class="tile-title">Reception styling, head to toe</span>
-          </figcaption>
-        </figure>
-
-        <figure class="tile ph ph--5" data-cat="skin">
-          <span class="tile-chip">Skin</span>
-          <figcaption class="tile-overlay">
-            <span class="tile-cat">Skin</span>
-            <span class="tile-title">Hydrating glass facial</span>
-          </figcaption>
-        </figure>
-
-        <figure class="tile ph ph--4" data-cat="hair">
-          <span class="tile-chip">Hair</span>
-          <figcaption class="tile-overlay">
-            <span class="tile-cat">Hair</span>
-            <span class="tile-title">Blunt collarbone bob</span>
-          </figcaption>
-        </figure>
-
-        <figure class="tile ph ph--6" data-cat="makeup">
-          <span class="tile-chip">Makeup</span>
-          <figcaption class="tile-overlay">
-            <span class="tile-cat">Makeup</span>
-            <span class="tile-title">Editorial smoked liner</span>
-          </figcaption>
-        </figure>
-
-        <figure class="tile ph ph--3" data-cat="nails">
-          <span class="tile-chip">Nails</span>
-          <figcaption class="tile-overlay">
-            <span class="tile-cat">Nails</span>
-            <span class="tile-title">Deep berry short square</span>
           </figcaption>
         </figure>
 
@@ -1534,7 +1534,14 @@ figure,figcaption{margin:0}
     });
   }
 
-  /* --- G. Footer year ------------------------------------------------------ */
+  /* --- G. Hero video: hold still for reduced-motion visitors ---------------- */
+  var heroVideo = document.querySelector('.hero-video');
+  if (heroVideo && reduceMotion) {
+    heroVideo.removeAttribute('autoplay');
+    heroVideo.pause();
+  }
+
+  /* --- H. Footer year ------------------------------------------------------ */
   document.getElementById('year').textContent = new Date().getFullYear();
 })();
 </script>

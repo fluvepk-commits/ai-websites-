@@ -824,9 +824,9 @@ figure,figcaption{margin:0}
         <!-- [SWAP] Each tile: put <img src="images/...jpg" alt="..."> inside the .ph
              and add class "has-photo". The onerror handler falls back to the
              gradient placeholder if the file is missing — delete it once every
-             tile has a real photo. -->
+             tile has a real photo. Photographed tiles lead the grid; the
+             remaining placeholders trail it. -->
 
-        <!-- Real photo 1 — bridal (portrait, fills the tall slot) -->
         <figure class="tile ph ph--3 tall has-photo" data-cat="bridal">
           <img src="images/bridal-glam.jpg" loading="lazy" alt="Bride in a deep red and gold outfit with full bridal makeup and styled hair"
                onerror="this.closest('.ph').classList.remove('has-photo'); this.remove();">
@@ -837,7 +837,6 @@ figure,figcaption{margin:0}
           </figcaption>
         </figure>
 
-        <!-- Real photo 2 — blow-dry -->
         <figure class="tile ph ph--2 has-photo" data-cat="hair">
           <img src="images/blow-dry.jpg" loading="lazy" alt="Stylist finishing a glossy round-brush blow-dry on long dark hair"
                onerror="this.closest('.ph').classList.remove('has-photo'); this.remove();">
@@ -848,7 +847,26 @@ figure,figcaption{margin:0}
           </figcaption>
         </figure>
 
-        <!-- Real photo 3 — wash / scalp ritual -->
+        <figure class="tile ph ph--5 has-photo" data-cat="nails">
+          <img src="images/nail-art.jpg" loading="lazy" alt="Technician painting a shimmer accent onto a long almond nail under a lamp"
+               onerror="this.closest('.ph').classList.remove('has-photo'); this.remove();">
+          <span class="tile-chip">Nails</span>
+          <figcaption class="tile-overlay">
+            <span class="tile-cat">Nails</span>
+            <span class="tile-title">Shimmer-accent almond set</span>
+          </figcaption>
+        </figure>
+
+        <figure class="tile ph ph--4 has-photo" data-cat="makeup">
+          <img src="images/bridal-rose.jpg" loading="lazy" alt="Bride in a rose and gold dupatta with soft glam makeup and pearl headpiece"
+               onerror="this.closest('.ph').classList.remove('has-photo'); this.remove();">
+          <span class="tile-chip">Makeup</span>
+          <figcaption class="tile-overlay">
+            <span class="tile-cat">Makeup</span>
+            <span class="tile-title">Soft rose glam &amp; pearls</span>
+          </figcaption>
+        </figure>
+
         <figure class="tile ph ph--6 has-photo" data-cat="hair">
           <img src="images/scalp-ritual.jpg" loading="lazy" alt="Client relaxing at the basin during a scalp massage and wash"
                onerror="this.closest('.ph').classList.remove('has-photo'); this.remove();">
@@ -859,20 +877,23 @@ figure,figcaption{margin:0}
           </figcaption>
         </figure>
 
-        <!-- Placeholder tiles below — same pattern, waiting on real photos -->
-        <figure class="tile ph ph--4" data-cat="makeup">
+        <figure class="tile ph ph--3 has-photo" data-cat="makeup">
+          <img src="images/bridal-emerald.jpg" loading="lazy" alt="Bride with dewy glam makeup and emerald jewellery, hair swept back"
+               onerror="this.closest('.ph').classList.remove('has-photo'); this.remove();">
           <span class="tile-chip">Makeup</span>
           <figcaption class="tile-overlay">
             <span class="tile-cat">Makeup</span>
-            <span class="tile-title">Golden-hour glow</span>
+            <span class="tile-title">Dewy glam, emerald set</span>
           </figcaption>
         </figure>
 
-        <figure class="tile ph ph--5" data-cat="nails">
-          <span class="tile-chip">Nails</span>
+        <figure class="tile ph ph--2 has-photo" data-cat="bridal">
+          <img src="images/bridal-reception.jpg" loading="lazy" alt="Bride in an embellished champagne gown photographed beside a floral arrangement"
+               onerror="this.closest('.ph').classList.remove('has-photo'); this.remove();">
+          <span class="tile-chip">Bridal</span>
           <figcaption class="tile-overlay">
-            <span class="tile-cat">Nails</span>
-            <span class="tile-title">Milky almond gel set</span>
+            <span class="tile-cat">Bridal</span>
+            <span class="tile-title">Reception styling, head to toe</span>
           </figcaption>
         </figure>
 
@@ -884,7 +905,7 @@ figure,figcaption{margin:0}
           </figcaption>
         </figure>
 
-        <figure class="tile ph ph--2" data-cat="hair">
+        <figure class="tile ph ph--4" data-cat="hair">
           <span class="tile-chip">Hair</span>
           <figcaption class="tile-overlay">
             <span class="tile-cat">Hair</span>
@@ -892,15 +913,7 @@ figure,figcaption{margin:0}
           </figcaption>
         </figure>
 
-        <figure class="tile ph ph--3 wide" data-cat="bridal">
-          <span class="tile-chip">Bridal</span>
-          <figcaption class="tile-overlay">
-            <span class="tile-cat">Bridal</span>
-            <span class="tile-title">Trial morning, Kerrytown</span>
-          </figcaption>
-        </figure>
-
-        <figure class="tile ph ph--4" data-cat="makeup">
+        <figure class="tile ph ph--6" data-cat="makeup">
           <span class="tile-chip">Makeup</span>
           <figcaption class="tile-overlay">
             <span class="tile-cat">Makeup</span>
@@ -908,7 +921,7 @@ figure,figcaption{margin:0}
           </figcaption>
         </figure>
 
-        <figure class="tile ph ph--6" data-cat="nails">
+        <figure class="tile ph ph--3" data-cat="nails">
           <span class="tile-chip">Nails</span>
           <figcaption class="tile-overlay">
             <span class="tile-cat">Nails</span>

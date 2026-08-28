@@ -1,23 +1,41 @@
 # Photos
 
-`index.html` looks for these five files. Filenames must match exactly —
-drop the images in and the page picks them up, no code changes needed.
+`index.html` looks for these files by exact name. Drop them in and the page
+picks them up — no code changes needed.
 
-| File | Used in | Best shape |
-|------|---------|-----------|
-| `salon-interior.jpg` | About / Our Story — main image | portrait or square, ~1200px wide |
-| `styling-curls.jpg`  | About / Our Story — small offset image | portrait, ~800px wide |
-| `bridal-glam.jpg`    | Gallery — large tall tile | portrait, ~1000px wide |
-| `blow-dry.jpg`       | Gallery — standard tile | portrait or square, ~900px wide |
-| `scalp-ritual.jpg`   | Gallery — standard tile | portrait or square, ~900px wide |
+## Our Story (About section)
 
-Every slot is `object-fit: cover`, so a photo is centre-cropped to the tile —
-keep the subject near the middle. Export as JPEG around quality 75–80; each
-file under ~300 KB keeps the page fast.
+| File | Slot | Best shape |
+|------|------|-----------|
+| `salon-interior.jpg` | Main image | portrait, ~1200px wide |
+| `styling-curls.jpg`  | Small offset image | portrait, ~800px wide |
 
-Any tile whose file is missing falls back to the blush gradient placeholder,
-so the page never shows a broken image.
+## Our Work (Gallery)
 
-The remaining gallery tiles are still placeholders. To fill one, copy the
-pattern from a tile that already has a photo: add an `<img>` as the first
-child and add `has-photo` to the `<figure>` class list.
+| File | Tile | Category |
+|------|------|----------|
+| `bridal-glam.jpg`       | Large tall tile | Bridal |
+| `blow-dry.jpg`          | Standard | Hair |
+| `nail-art.jpg`          | Standard | Nails |
+| `bridal-rose.jpg`       | Standard | Makeup |
+| `scalp-ritual.jpg`      | Standard | Hair |
+| `bridal-emerald.jpg`    | Standard | Makeup |
+| `bridal-reception.jpg`  | Standard | Bridal |
+
+All gallery photos want a portrait or square crop, ~900–1200px wide.
+
+## Export settings
+
+JPEG, quality 75–80, each file under ~300 KB keeps the page fast.
+
+Every slot is `object-fit: cover`, so the photo is centre-cropped to the
+tile — keep the subject near the middle. Crop out phone status bars and
+screen-recording chrome before saving; the tile will not hide them.
+
+Any file that is missing falls back to the blush gradient placeholder, so
+the page never shows a broken image.
+
+## Filling the four remaining placeholder tiles
+
+Copy the pattern from a tile that already has a photo: add an `<img>` as the
+first child of the `<figure>` and add `has-photo` to its class list.

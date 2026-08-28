@@ -17,7 +17,8 @@
   [SWAP] comment where client-specific content lives:
     1.  Colours / fonts ......... :root variables in the CSS
     2.  Logo .................... .logo markup in header + footer
-    3.  Photos .................. every .ph element (see "PLACEHOLDER IMAGES")
+    3.  Photos .................. drop files into images/ (see images/README.md);
+                                  any .ph element without one stays a gradient
     4.  Copy .................... section by section, all plain HTML
     5.  Contact details ......... #contact section + footer + tel:/wa.me links
   Optional: to use web fonts, add before </head>:
@@ -161,6 +162,11 @@ figure,figcaption{margin:0}
 .ph--4{background-image:radial-gradient(110% 90% at 70% 25%, rgba(255,255,255,.8), rgba(255,255,255,0) 58%), linear-gradient(135deg,#EDE7E0,#CFC3B6 55%,#A79483)}
 .ph--5{background-image:radial-gradient(120% 100% at 20% 20%, rgba(255,255,255,.85), rgba(255,255,255,0) 55%), linear-gradient(150deg,#F6EAE6,#E2C0BA 60%,#B98D87)}
 .ph--6{background-image:radial-gradient(110% 90% at 60% 75%, rgba(255,255,255,.7), rgba(255,255,255,0) 60%), linear-gradient(190deg,#E9DED6,#C4AFA4 55%,#94796D)}
+/* A real photo drops in as <img> inside the .ph; the gradient stays behind it
+   as a fallback. Add class "has-photo" alongside so the sheen + glyph switch off. */
+.ph img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:1}
+.ph.has-photo::after{display:none}
+.ph.has-photo .ph-mark{display:none}
 /* tiny centred glyph so an empty placeholder still looks intentional */
 .ph-mark{
   position:absolute; inset:0; display:grid; place-items:center;
@@ -738,9 +744,17 @@ figure,figcaption{margin:0}
 
         <div class="about-media reveal">
           <!-- [SWAP] main salon interior photo -->
-          <div class="ph ph--2"><span class="ph-mark">Salon Interior</span></div>
+          <div class="ph ph--2 has-photo">
+            <img src="images/salon-interior.jpg" alt="The Bloom &amp; Blush salon floor — oak panelling, backlit round mirrors and green styling chairs"
+                 onerror="this.closest('.ph').classList.remove('has-photo'); this.remove();">
+            <span class="ph-mark">Salon Interior</span>
+          </div>
           <!-- [SWAP] secondary detail photo (hidden on small screens) -->
-          <div class="ph ph--5"><span class="ph-mark">Styling</span></div>
+          <div class="ph ph--5 has-photo">
+            <img src="images/styling-curls.jpg" alt="A stylist curling long blonde hair at the styling station"
+                 onerror="this.closest('.ph').classList.remove('has-photo'); this.remove();">
+            <span class="ph-mark">Styling</span>
+          </div>
           <div class="about-badge"><b>14</b> years on Blossom Street</div>
         </div>
 
@@ -807,23 +821,45 @@ figure,figcaption{margin:0}
       </div>
 
       <div class="gallery reveal">
-        <!-- [SWAP] each .tile: replace the .ph div with <img src="..." alt="..."> -->
-        <figure class="tile ph ph--3 tall" data-cat="hair">
-          <span class="tile-chip">Hair</span>
-          <figcaption class="tile-overlay">
-            <span class="tile-cat">Hair</span>
-            <span class="tile-title">Warm caramel balayage</span>
-          </figcaption>
-        </figure>
+        <!-- [SWAP] Each tile: put <img src="images/...jpg" alt="..."> inside the .ph
+             and add class "has-photo". The onerror handler falls back to the
+             gradient placeholder if the file is missing — delete it once every
+             tile has a real photo. -->
 
-        <figure class="tile ph ph--5 wide" data-cat="bridal">
+        <!-- Real photo 1 — bridal (portrait, fills the tall slot) -->
+        <figure class="tile ph ph--3 tall has-photo" data-cat="bridal">
+          <img src="images/bridal-glam.jpg" loading="lazy" alt="Bride in a deep red and gold outfit with full bridal makeup and styled hair"
+               onerror="this.closest('.ph').classList.remove('has-photo'); this.remove();">
           <span class="tile-chip">Bridal</span>
           <figcaption class="tile-overlay">
             <span class="tile-cat">Bridal</span>
-            <span class="tile-title">Soft updo with fresh stems</span>
+            <span class="tile-title">Full bridal glam &amp; hair</span>
           </figcaption>
         </figure>
 
+        <!-- Real photo 2 — blow-dry -->
+        <figure class="tile ph ph--2 has-photo" data-cat="hair">
+          <img src="images/blow-dry.jpg" loading="lazy" alt="Stylist finishing a glossy round-brush blow-dry on long dark hair"
+               onerror="this.closest('.ph').classList.remove('has-photo'); this.remove();">
+          <span class="tile-chip">Hair</span>
+          <figcaption class="tile-overlay">
+            <span class="tile-cat">Hair</span>
+            <span class="tile-title">Glossy blow-dry waves</span>
+          </figcaption>
+        </figure>
+
+        <!-- Real photo 3 — wash / scalp ritual -->
+        <figure class="tile ph ph--6 has-photo" data-cat="hair">
+          <img src="images/scalp-ritual.jpg" loading="lazy" alt="Client relaxing at the basin during a scalp massage and wash"
+               onerror="this.closest('.ph').classList.remove('has-photo'); this.remove();">
+          <span class="tile-chip">Hair</span>
+          <figcaption class="tile-overlay">
+            <span class="tile-cat">Hair</span>
+            <span class="tile-title">Scalp ritual &amp; smoothing wash</span>
+          </figcaption>
+        </figure>
+
+        <!-- Placeholder tiles below — same pattern, waiting on real photos -->
         <figure class="tile ph ph--4" data-cat="makeup">
           <span class="tile-chip">Makeup</span>
           <figcaption class="tile-overlay">
@@ -832,19 +868,11 @@ figure,figcaption{margin:0}
           </figcaption>
         </figure>
 
-        <figure class="tile ph ph--6" data-cat="nails">
+        <figure class="tile ph ph--5" data-cat="nails">
           <span class="tile-chip">Nails</span>
           <figcaption class="tile-overlay">
             <span class="tile-cat">Nails</span>
             <span class="tile-title">Milky almond gel set</span>
-          </figcaption>
-        </figure>
-
-        <figure class="tile ph ph--2" data-cat="hair">
-          <span class="tile-chip">Hair</span>
-          <figcaption class="tile-overlay">
-            <span class="tile-cat">Hair</span>
-            <span class="tile-title">Blunt collarbone bob</span>
           </figcaption>
         </figure>
 
@@ -856,7 +884,15 @@ figure,figcaption{margin:0}
           </figcaption>
         </figure>
 
-        <figure class="tile ph ph--3" data-cat="bridal">
+        <figure class="tile ph ph--2" data-cat="hair">
+          <span class="tile-chip">Hair</span>
+          <figcaption class="tile-overlay">
+            <span class="tile-cat">Hair</span>
+            <span class="tile-title">Blunt collarbone bob</span>
+          </figcaption>
+        </figure>
+
+        <figure class="tile ph ph--3 wide" data-cat="bridal">
           <span class="tile-chip">Bridal</span>
           <figcaption class="tile-overlay">
             <span class="tile-cat">Bridal</span>
@@ -872,21 +908,14 @@ figure,figcaption{margin:0}
           </figcaption>
         </figure>
 
-        <figure class="tile ph ph--6" data-cat="hair">
-          <span class="tile-chip">Hair</span>
-          <figcaption class="tile-overlay">
-            <span class="tile-cat">Hair</span>
-            <span class="tile-title">Copper gloss refresh</span>
-          </figcaption>
-        </figure>
-
-        <figure class="tile ph ph--2" data-cat="nails">
+        <figure class="tile ph ph--6" data-cat="nails">
           <span class="tile-chip">Nails</span>
           <figcaption class="tile-overlay">
             <span class="tile-cat">Nails</span>
             <span class="tile-title">Deep berry short square</span>
           </figcaption>
         </figure>
+
       </div>
     </div>
   </section>

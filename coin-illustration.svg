@@ -1,0 +1,130 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1760 896" width="1760" height="896">
+<title>Coin cluster</title>
+
+<defs>
+  <radialGradient id="vignette" cx="50%" cy="45%" r="65%">
+    <stop offset="0%" stop-color="#0c0c0d"/>
+    <stop offset="100%" stop-color="#000"/>
+  </radialGradient>
+
+  <!-- matte coin face: dark center, bright beveled rim band, dark outer edge -->
+  <radialGradient id="faceDark" cx="50%" cy="50%" r="50%">
+    <stop offset="0%"   stop-color="#0a0a0b"/>
+    <stop offset="72%"  stop-color="#0a0a0b"/>
+    <stop offset="79%"  stop-color="#9c9ca2"/>
+    <stop offset="84%"  stop-color="#e4e4e8"/>
+    <stop offset="89%"  stop-color="#6c6c72"/>
+    <stop offset="93%"  stop-color="#141416"/>
+    <stop offset="100%" stop-color="#020203"/>
+  </radialGradient>
+
+  <!-- glossier variant used on the thicker, more reflective coins -->
+  <radialGradient id="faceGlossy" cx="50%" cy="50%" r="50%">
+    <stop offset="0%"   stop-color="#101012"/>
+    <stop offset="70%"  stop-color="#101012"/>
+    <stop offset="77%"  stop-color="#b4b4ba"/>
+    <stop offset="83%"  stop-color="#f6f6fa"/>
+    <stop offset="88%"  stop-color="#808086"/>
+    <stop offset="93%"  stop-color="#18181a"/>
+    <stop offset="100%" stop-color="#030304"/>
+  </radialGradient>
+
+  <radialGradient id="specular" cx="30%" cy="24%" r="42%">
+    <stop offset="0%"   stop-color="#ffffff" stop-opacity=".22"/>
+    <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+  </radialGradient>
+
+  <!-- one-sided glow standing in for a visible coin edge / thickness -->
+  <radialGradient id="rimGlowL" cx="10%" cy="50%" r="26%">
+    <stop offset="0%"   stop-color="#f2f2f6" stop-opacity=".30"/>
+    <stop offset="100%" stop-color="#f2f2f6" stop-opacity="0"/>
+  </radialGradient>
+  <radialGradient id="rimGlowR" cx="90%" cy="50%" r="26%">
+    <stop offset="0%"   stop-color="#f2f2f6" stop-opacity=".30"/>
+    <stop offset="100%" stop-color="#f2f2f6" stop-opacity="0"/>
+  </radialGradient>
+
+  <!-- chrome banding for the near-edge-on coin -->
+  <linearGradient id="chromeBar" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%"   stop-color="#050506"/>
+    <stop offset="14%"  stop-color="#e9e9ed"/>
+    <stop offset="30%"  stop-color="#47474b"/>
+    <stop offset="50%"  stop-color="#f8f8fb"/>
+    <stop offset="70%"  stop-color="#3a3a3e"/>
+    <stop offset="86%"  stop-color="#d9d9dd"/>
+    <stop offset="100%" stop-color="#08090a"/>
+  </linearGradient>
+
+  <linearGradient id="markGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+    <stop offset="0%"   stop-color="#cfcfd4"/>
+    <stop offset="45%"  stop-color="#8c8c93"/>
+    <stop offset="100%" stop-color="#4d4d52"/>
+  </linearGradient>
+
+  <!-- star + flag emblem, authored in a 100x100 box -->
+  <symbol id="star" viewBox="0 0 100 100">
+    <path fill="url(#markGrad)" d="M44,4 L54,45 L88,50 L55,55 L50,88 L45,55 L12,50 L45,45 Z
+             M48,20 L50,27 L63,22 Z"/>
+  </symbol>
+</defs>
+
+<rect width="1760" height="896" fill="#000"/>
+<rect width="1760" height="896" fill="url(#vignette)"/>
+
+<!-- coin 1 : large flat coin, upper left -->
+<g transform="translate(453,207)">
+  <circle r="92" fill="url(#faceDark)"/>
+  <circle r="92" fill="url(#specular)"/>
+  <use href="#star" x="-46" y="-46" width="92" height="92"/>
+</g>
+
+<!-- coin 2 : small coin, upper area -->
+<g transform="translate(1027,133) rotate(-6)">
+  <ellipse rx="36" ry="40" fill="url(#faceDark)"/>
+  <ellipse rx="36" ry="40" fill="url(#specular)"/>
+  <use href="#star" x="-36" y="-40" width="72" height="80" transform="scale(0.90,1)"/>
+</g>
+
+<!-- coin 3 : medium coin, right -->
+<g transform="translate(1168,350) rotate(-4)">
+  <ellipse rx="66" ry="72" fill="url(#faceDark)"/>
+  <ellipse rx="66" ry="72" fill="url(#specular)"/>
+  <use href="#star" x="-66" y="-72" width="132" height="144" transform="scale(0.92,1)"/>
+</g>
+
+<!-- coin 4 : large glossy coin, right side, edge catching light on its left -->
+<g transform="translate(1261,540) rotate(-6)">
+  <ellipse rx="72" ry="85" fill="url(#faceGlossy)"/>
+  <ellipse rx="72" ry="85" fill="url(#rimGlowL)"/>
+  <ellipse rx="72" ry="85" fill="url(#specular)"/>
+  <use href="#star" x="-61" y="-72" width="122" height="144" transform="scale(0.85,1)"/>
+</g>
+
+<!-- coin 5 : small dark ringed coin, lower middle-right, star sits at an angle -->
+<g transform="translate(1101,623) rotate(18)">
+  <ellipse rx="57" ry="59" fill="url(#faceDark)"/>
+  <ellipse rx="57" ry="59" fill="url(#specular)"/>
+  <use href="#star" x="-56" y="-58" width="112" height="116" transform="scale(0.97,1)"/>
+</g>
+
+<!-- coin 6 : near edge-on chrome sliver, lower left -->
+<g transform="translate(415,690) rotate(-8)">
+  <rect x="-17" y="-108" width="34" height="216" rx="17" fill="url(#chromeBar)"/>
+</g>
+
+<!-- coin 7b : smaller coin, partly behind coin 7a -->
+<g transform="translate(645,860) rotate(10)">
+  <ellipse rx="46" ry="50" fill="url(#faceDark)"/>
+  <ellipse rx="46" ry="50" fill="url(#specular)"/>
+  <use href="#star" x="-45" y="-49" width="90" height="98" transform="scale(0.92,1)"/>
+</g>
+
+<!-- coin 7a : large glossy coin, bottom centre, edge catching light on its right -->
+<g transform="translate(770,760) rotate(8)">
+  <ellipse rx="75" ry="88" fill="url(#faceGlossy)"/>
+  <ellipse rx="75" ry="88" fill="url(#rimGlowR)"/>
+  <ellipse rx="75" ry="88" fill="url(#specular)"/>
+  <use href="#star" x="-64" y="-75" width="128" height="150" transform="scale(0.85,1)"/>
+</g>
+
+</svg>

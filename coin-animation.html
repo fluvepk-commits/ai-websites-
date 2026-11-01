@@ -9,22 +9,14 @@
   ============================================================================
   COIN ANIMATION — single-file, no external requests
   ----------------------------------------------------------------------------
-  Built from a 16-frame storyboard: a swarm of dark metallic coins tumbles in
-  the background while one "hero" coin pulls into focus, spins from face-on
-  to edge-on and back, zooms toward camera, then eases back out to rejoin the
-  swarm — a seamless infinite loop. Pure CSS 3D transforms + a small rAF loop
-  for the hero coin; everything else is CSS keyframe animation.
+  A cluster of dark metallic coins (star emblem) hangs on a black field and
+  drifts/rotates gently in place — a subtle ambient loop, not a story.
+  Pure CSS 3D transforms + CSS keyframes; no JS animation loop needed.
   ============================================================================
 -->
 
 <style>
-  :root{
-    --bg:        #000;
-    --metal-hi:  #6a6a70;
-    --metal-mid: #232326;
-    --metal-lo:  #050506;
-    --rim:       #8d8d93;
-  }
+  :root{ --bg:#000; }
 
   *{ box-sizing:border-box; }
 
@@ -40,237 +32,174 @@
     position:relative;
     width:100vw;
     height:100vh;
-    background:
-      radial-gradient(ellipse at 50% 45%, #0e0e10 0%, #000 65%);
-    perspective:1600px;
+    background: radial-gradient(ellipse at 50% 45%, #0c0c0d 0%, #000 65%);
+    perspective:1400px;
     overflow:hidden;
   }
 
   /* ---------------------------------------------------------------------
-     Coin anatomy: a flat disc with two faces (front/back), a thin edge
-     highlight that only reads when the coin is near edge-on, and a soft
-     drop shadow. Logo is drawn once in <defs> and reused via <use>.
+     Each coin = an outer wrapper that floats (slow position drift) and an
+     inner disc that rotates (slow rotateY oscillation). Separate elements
+     so the two animations never fight over the same `transform` property.
   --------------------------------------------------------------------- */
-  .coin{
+  .float{
     position:absolute;
     transform-style:preserve-3d;
-    will-change:transform;
+    animation: floaty var(--float-dur) ease-in-out var(--float-delay) infinite;
+    filter:blur(var(--blur));
   }
+
+  .coin{
+    position:relative;
+    width:100%;
+    height:100%;
+    transform-style:preserve-3d;
+    animation: spin var(--spin-dur) ease-in-out var(--spin-delay) infinite;
+    filter: drop-shadow(0 14px 26px rgba(0,0,0,.65));
+  }
+
   .coin__face{
     position:absolute;
     inset:0;
     border-radius:50%;
     backface-visibility:hidden;
     background:
-      radial-gradient(circle at 34% 28%, var(--metal-hi) 0%, var(--metal-mid) 48%, var(--metal-lo) 100%);
+      radial-gradient(circle at 30% 24%, rgba(255,255,255,.22) 0%, rgba(255,255,255,0) 26%),
+      radial-gradient(circle, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 67%, #b4b4ba 75%, #f3f3f7 82%, #828288 89%, #141416 95%, #020203 100%),
+      #060607;
     box-shadow:
-      inset 0 0 0 3.5% rgba(255,255,255,.10),
-      inset 0 0 0 5% rgba(0,0,0,.65),
-      inset 0 2px 10px rgba(0,0,0,.6);
+      inset 0 0 0 1.5% rgba(0,0,0,.85),
+      inset 0 8% 18% rgba(0,0,0,.55);
     display:flex;
     align-items:center;
     justify-content:center;
   }
   .coin__face--back{ transform:rotateY(180deg); }
+
   .coin__face svg{
-    width:56%;
-    height:56%;
-    filter:drop-shadow(0 1px 1px rgba(0,0,0,.6));
+    width:48%;
+    height:48%;
+    filter:drop-shadow(0 1.5px 1.5px rgba(0,0,0,.7));
   }
+
   .coin__edge{
     position:absolute;
     left:50%;
-    top:4%;
-    bottom:4%;
-    width:6%;
+    top:3%;
+    bottom:3%;
+    width:5%;
     transform:translateX(-50%);
     border-radius:50%;
     background:linear-gradient(90deg,
       rgba(255,255,255,0) 0%,
-      rgba(230,230,235,.9) 48%,
+      rgba(225,225,230,.85) 48%,
       rgba(255,255,255,0) 100%);
-    opacity:0;
+    opacity:var(--edge-op);
     pointer-events:none;
   }
 
-  /* Hero coin lives in its own layer so it can sit above/below the swarm */
-  #heroCoin{ left:50%; top:50%; }
-
-  /* ---------------------------------------------------------------------
-     Background swarm — scattered, tumbling, drifting down the stage,
-     looping with randomized timing set inline per-coin via CSS vars.
-  --------------------------------------------------------------------- */
-  .bg-coin{
-    position:absolute;
-    top:-18vh;
-    left:var(--x);
-    width:var(--size);
-    height:var(--size);
-    filter:blur(var(--blur));
-    opacity:0;
-    animation: drift var(--dur) linear var(--delay) infinite;
-  }
-  .bg-coin .coin__face{ position:absolute; inset:0; }
-
-  /* translation + rotation live in ONE animation: two animations can't
-     both drive `transform` (the later one simply wins and replaces the
-     other), so drift and spin are combined into a single keyframe set. */
-  @keyframes drift{
-    0%   { transform:translate3d(0, 0, 0) rotateY(0deg) rotateZ(var(--tilt)); opacity:0; }
-    8%   { opacity:var(--op); }
-    88%  { opacity:var(--op); }
-    100% { transform:translate3d(var(--dx), 128vh, 0) rotateY(var(--spins)) rotateZ(var(--tilt)); opacity:0; }
+  @keyframes floaty{
+    0%   { transform:translate3d(0, 0, 0); }
+    25%  { transform:translate3d(var(--dx),  calc(var(--dy) * -1), 0); }
+    50%  { transform:translate3d(calc(var(--dx) * -0.5), var(--dy), 0); }
+    75%  { transform:translate3d(calc(var(--dx) * 0.6), calc(var(--dy) * -0.65), 0); }
+    100% { transform:translate3d(0, 0, 0); }
   }
 
-  .credit{
-    position:absolute;
-    left:20px;
-    bottom:16px;
-    color:#444;
-    font:12px/1.4 -apple-system, "Segoe UI", sans-serif;
-    letter-spacing:.04em;
-    user-select:none;
+  @keyframes spin{
+    0%   { transform: rotateY(calc(var(--base-y) - var(--amp))) rotateZ(var(--tilt)); }
+    50%  { transform: rotateY(calc(var(--base-y) + var(--amp))) rotateZ(var(--tilt)); }
+    100% { transform: rotateY(calc(var(--base-y) - var(--amp))) rotateZ(var(--tilt)); }
   }
 </style>
 </head>
 <body>
 
-<div class="stage" id="stage">
+<div class="stage" id="stage"></div>
 
-  <!-- hero coin: front/back faces + edge highlight, driven by JS below -->
-  <div class="coin" id="heroCoin">
-    <div class="coin__face coin__face--front">
-      <svg viewBox="0 0 100 100"><use href="#star-mark"></use></svg>
-    </div>
-    <div class="coin__edge" id="heroEdge"></div>
-    <div class="coin__face coin__face--back">
-      <svg viewBox="0 0 100 100"><use href="#star-mark"></use></svg>
-    </div>
-  </div>
-
-  <!-- reusable logo, defined once -->
-  <svg width="0" height="0" style="position:absolute">
-    <defs>
-      <g id="star-mark" fill="var(--rim)">
-        <circle cx="50" cy="50" r="46" fill="none" stroke="var(--rim)" stroke-width="2.2" opacity=".55"/>
-        <path d="M50 10 L58 32 L51 36 L63 47 L91 50 L63 53 L51 64 L58 68 L50 90 L42 68 L49 64 L37 53 L9 50 L37 47 L49 36 L42 32 Z"/>
-      </g>
-    </defs>
-  </svg>
-
-  <div class="credit">coin loop — storyboard-driven · css 3d</div>
-</div>
+<!-- reusable logo, defined once -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <linearGradient id="markGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"  stop-color="#c9c9ce"/>
+      <stop offset="45%" stop-color="#86868d"/>
+      <stop offset="100%" stop-color="#4d4d52"/>
+    </linearGradient>
+    <g id="star-mark" fill="url(#markGrad)">
+      <path d="M44,4 L54,45 L88,50 L55,55 L50,88 L45,55 L12,50 L45,45 Z
+               M48,20 L50,27 L63,22 Z"/>
+    </g>
+  </defs>
+</svg>
 
 <script>
 (function(){
   "use strict";
 
   var stage = document.getElementById('stage');
-  var hero  = document.getElementById('heroCoin');
-  var edge  = document.getElementById('heroEdge');
 
-  /* ---------------------------------------------------------------------
-     Background swarm: spawn N coins with randomized size, drift, spin
-     speed, blur and delay so they feel scattered and independent, like
-     frames 01-03 / 15-16 of the storyboard.
-  --------------------------------------------------------------------- */
-  var SWARM_COUNT = 11;
-  for (var i = 0; i < SWARM_COUNT; i++){
-    var el = document.createElement('div');
-    el.className = 'bg-coin coin';
+  // Hand-placed to echo the reference cluster: a few large coins, a
+  // scatter of smaller ones, and one near edge-on sliver lower-left.
+  var coins = [
+    { x:24, y:20, size:14.5, baseY:  8, amp:16, blur:0,   op:1.00 },
+    { x:58, y:11, size: 6.5, baseY: 30, amp:20, blur:1.0, op:0.85 },
+    { x:66, y:36, size:10.5, baseY: 18, amp:18, blur:0.4, op:0.95 },
+    { x:73, y:58, size:13.0, baseY: 50, amp:16, blur:0,   op:1.00 },
+    { x:62, y:69, size: 7.5, baseY: 12, amp:20, blur:0.8, op:0.90 },
+    { x:23, y:74, size:15.0, baseY: 84, amp: 6, blur:0,   op:1.00 },
+    { x:42, y:87, size:12.0, baseY: 38, amp:18, blur:0.3, op:0.95 },
+    { x:35, y:95, size: 7.0, baseY: 52, amp:18, blur:1.2, op:0.80 }
+  ];
 
-    var size   = 40 + Math.random() * 90;          // px
-    var xPct   = Math.random() * 100;               // vw start
-    var dx     = (Math.random() * 2 - 1) * 140;      // px horizontal drift
-    var dur    = 9 + Math.random() * 10;             // s to fall through
-    var spins  = Math.round(2 + Math.random() * 3) * 360; // deg, whole turns over the fall
-    var delay  = -Math.random() * dur;               // negative = mid-flight
-    var blur   = (Math.random() * 3).toFixed(1);
-    var op     = (0.35 + Math.random() * 0.55).toFixed(2);
-    var tilt   = (Math.random() * 40 - 20).toFixed(1);
+  coins.forEach(function(c, i){
+    var wrap = document.createElement('div');
+    wrap.className = 'float';
 
-    el.style.setProperty('--size', size + 'px');
-    el.style.setProperty('--x', xPct + 'vw');
-    el.style.setProperty('--dx', dx + 'px');
-    el.style.setProperty('--dur', dur + 's');
-    el.style.setProperty('--spins', spins + 'deg');
-    el.style.setProperty('--delay', delay + 's');
-    el.style.setProperty('--blur', blur + 'px');
-    el.style.setProperty('--op', op);
-    el.style.setProperty('--tilt', tilt + 'deg');
+    var sizePx = 'clamp(' + Math.round(c.size * 6) + 'px, ' + c.size + 'vw, ' + Math.round(c.size * 16) + 'px)';
+    wrap.style.left   = c.x + '%';
+    wrap.style.top    = c.y + '%';
+    wrap.style.width  = sizePx;
+    wrap.style.height = sizePx;
+    wrap.style.marginLeft = 'calc(' + sizePx + ' / -2)';
+    wrap.style.marginTop  = 'calc(' + sizePx + ' / -2)';
+    wrap.style.setProperty('--blur', c.blur + 'px');
+    wrap.style.opacity = c.op;
 
-    el.innerHTML =
+    var dx = (6 + Math.random() * 10).toFixed(1) + 'px';
+    var dy = (8 + Math.random() * 14).toFixed(1) + 'px';
+    var floatDur = (7 + Math.random() * 6).toFixed(1) + 's';
+    var floatDelay = (-Math.random() * 12).toFixed(1) + 's';
+    wrap.style.setProperty('--dx', dx);
+    wrap.style.setProperty('--dy', dy);
+    wrap.style.setProperty('--float-dur', floatDur);
+    wrap.style.setProperty('--float-delay', floatDelay);
+
+    var coin = document.createElement('div');
+    coin.className = 'coin';
+    var spinDur = (8 + Math.random() * 7).toFixed(1) + 's';
+    var spinDelay = (-Math.random() * 14).toFixed(1) + 's';
+    var tilt = (Math.random() * 16 - 8).toFixed(1) + 'deg';
+    coin.style.setProperty('--base-y', c.baseY + 'deg');
+    coin.style.setProperty('--amp', c.amp + 'deg');
+    coin.style.setProperty('--spin-dur', spinDur);
+    coin.style.setProperty('--spin-delay', spinDelay);
+    coin.style.setProperty('--tilt', tilt);
+
+    var edgeOp = Math.min(1, Math.abs(Math.sin(c.baseY * Math.PI / 180)) * 0.9 + 0.1);
+    coin.style.setProperty('--edge-op', edgeOp.toFixed(2));
+
+    coin.innerHTML =
       '<div class="coin__face coin__face--front">' +
         '<svg viewBox="0 0 100 100"><use href="#star-mark"></use></svg>' +
       '</div>' +
+      '<div class="coin__edge"></div>' +
       '<div class="coin__face coin__face--back">' +
         '<svg viewBox="0 0 100 100"><use href="#star-mark"></use></svg>' +
       '</div>';
 
-    stage.insertBefore(el, hero);
-  }
-
-  /* ---------------------------------------------------------------------
-     Hero coin: continuous Y-axis spin (never resets, so it never jumps),
-     with a periodic "focus pull" that eases the coin from small/off-center
-     (swarm) to large/centered (frames 04-06, 11-12) and back out
-     (frames 13-16) — matching the storyboard's zoom-in / zoom-out beat.
-     Because the focus curve is a pure cosine, t=0 and t=1 match exactly,
-     so the loop has no visible seam.
-  --------------------------------------------------------------------- */
-  var LOOP_MS   = 9000;    // one full zoom-in/zoom-out cycle
-  var SPIN_MS   = 2600;    // one full 360deg spin
-  var BASE_PX   = 150;     // base coin diameter
-  var MIN_SCALE = 0.34;
-  var MAX_SCALE = 2.35;
-
-  // swarm-position the hero starts/ends at (off-center, like the other coins)
-  var START_X = -26;  // vw offset from center
-  var START_Y = -16;  // vh offset from center
-
-  function ease(t){
-    // smooth 0->1->0 bump, perfectly periodic
-    return (1 - Math.cos(t * Math.PI * 2)) / 2;
-  }
-
-  hero.style.width  = BASE_PX + 'px';
-  hero.style.height = BASE_PX + 'px';
-  hero.style.marginLeft = (-BASE_PX / 2) + 'px';
-  hero.style.marginTop  = (-BASE_PX / 2) + 'px';
-
-  var start = performance.now();
-
-  function frame(now){
-    var elapsed = now - start;
-
-    var spinT  = (elapsed % SPIN_MS) / SPIN_MS;
-    var angle  = spinT * 360;
-
-    var loopT  = (elapsed % LOOP_MS) / LOOP_MS;
-    var focus  = ease(loopT); // 0 = out in the swarm, 1 = fully zoomed in
-
-    var scale = MIN_SCALE + (MAX_SCALE - MIN_SCALE) * focus;
-    var x = START_X * (1 - focus);   // vw
-    var y = START_Y * (1 - focus);   // vh
-    var z = focus * 420;             // px toward camera
-    var blur = (1 - focus) * 2.2;
-    var brightness = 0.78 + focus * 0.4;
-
-    hero.style.transform =
-      'translate3d(calc(' + x + 'vw), calc(' + y + 'vh), ' + z + 'px) ' +
-      'scale(' + scale.toFixed(3) + ') ' +
-      'rotateY(' + angle.toFixed(2) + 'deg)';
-    hero.style.filter = 'blur(' + blur.toFixed(2) + 'px) brightness(' + brightness.toFixed(2) + ')';
-    hero.style.zIndex = String(Math.round(focus * 100) + 10);
-
-    // edge highlight peaks when the coin is side-on (90deg / 270deg)
-    var edgeAmt = Math.abs(Math.sin(angle * Math.PI / 180));
-    edge.style.opacity = (edgeAmt * (0.4 + focus * 0.6)).toFixed(2);
-
-    requestAnimationFrame(frame);
-  }
-
-  requestAnimationFrame(frame);
+    wrap.appendChild(coin);
+    stage.appendChild(wrap);
+  });
 })();
 </script>
 
